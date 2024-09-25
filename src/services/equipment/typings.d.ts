@@ -20,7 +20,7 @@ declare namespace API {
   };
 
   type updateByIdParams = {
-    id: string;
+    _id: string;
   };
 
   type UpdateEquipmentDto = {

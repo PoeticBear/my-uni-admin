@@ -156,6 +156,12 @@ export default defineConfig({
     },
     {
       requestLibPath:"import { request } from '@umijs/max'",
+      schemaPath:join(__dirname,'swagger-muscle.json'),
+      mock:false,
+      projectName:'muscle'
+    },
+    {
+      requestLibPath:"import { request } from '@umijs/max'",
       schemaPath:join(__dirname,'swagger-file.json'),
       mock:false,
       projectName:'file'

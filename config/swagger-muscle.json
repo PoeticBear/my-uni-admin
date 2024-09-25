@@ -1,0 +1,212 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/muscles/create": {
+      "post": {
+        "operationId": "create",
+        "summary": "创建肌群数据",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMuscleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "muscles"
+        ]
+      }
+    },
+    "/api/muscles": {
+      "delete": {
+        "operationId": "deleteByIds",
+        "summary": "批量删除肌群数据",
+        "parameters": [
+          {
+            "name": "ids",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "muscles"
+        ]
+      },
+      "get": {
+        "operationId": "fetchMuscles",
+        "summary": "查询训练器械",
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name_cn",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "current",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "muscles"
+        ]
+      }
+    },
+    "/api/muscles/{id}": {
+      "put": {
+        "operationId": "updateById",
+        "summary": "更新肌群数据",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMuscleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "muscles"
+        ]
+      }
+    },
+    "/api/muscles/body-part": {
+      "get": {
+        "operationId": "fetchBodyPart",
+        "summary": "获取一级肌群数据（身体部位）",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "muscles"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "muscle API 文档",
+    "description": "与muscle相关的 API 文档",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "CreateMuscleDto": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "type": "string",
+            "description": "父级肌群"
+          },
+          "name": {
+            "type": "string",
+            "description": "肌肉英文名称"
+          },
+          "name_cn": {
+            "type": "string",
+            "description": "肌肉中文名称"
+          },
+          "image": {
+            "type": "string",
+            "description": "图片地址"
+          }
+        },
+        "required": [
+          "parent",
+          "name",
+          "name_cn",
+          "image"
+        ]
+      },
+      "UpdateMuscleDto": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "type": "string",
+            "description": "父级肌群"
+          },
+          "name": {
+            "type": "string",
+            "description": "肌肉英文名称"
+          },
+          "name_cn": {
+            "type": "string",
+            "description": "肌肉中文名称"
+          },
+          "image": {
+            "type": "string",
+            "description": "图片地址"
+          }
+        }
+      }
+    }
+  }
+}

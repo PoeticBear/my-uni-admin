@@ -1,8 +1,8 @@
-
-
 export type TableListItem = {
-  id:string;
-  key:number;
+  _id: string;
+  id: string;
+  key: number;
+  parent: string;
   name: string;
   name_cn: string;
   image: string;
@@ -19,9 +19,9 @@ export type TableListData = {
   pagination: Partial<TableListPagination>;
 };
 
-
 export type TableListParams = {
-  key?:number;
+  key?: number;
+  parent?: string;
   name?: string;
   name_cn?: string;
   pageSize?: number;

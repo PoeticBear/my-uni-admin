@@ -84,6 +84,12 @@ export default [
         path: '/workout/equipment',
         component: './workout/equipment',
       },
+      {
+        name: 'muscle',
+        icon: 'smile',
+        path: '/workout/muscle',
+        component: './workout/muscle',
+      },
     ],
   },
   // {
