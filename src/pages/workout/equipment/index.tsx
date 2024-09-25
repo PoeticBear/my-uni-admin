@@ -116,7 +116,7 @@ const TableList: React.FC = () => {
         <img
           src={text} // 使用图片地址
           alt="器械图片"
-          style={{ width: 100, height: 100, objectFit: 'cover' }} // 设置图片样式
+          style={{ width: 20, height: 20, objectFit: 'cover' }} // 设置图片样式
         />
       ),
     },
