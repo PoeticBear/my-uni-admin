@@ -1,0 +1,188 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/equipments/create": {
+      "post": {
+        "operationId": "create",
+        "summary": "创建训练器械",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEquipmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "equipments"
+        ]
+      }
+    },
+    "/api/equipments": {
+      "delete": {
+        "operationId": "deleteByIds",
+        "summary": "批量删除训练器械",
+        "parameters": [
+          {
+            "name": "ids",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "equipments"
+        ]
+      },
+      "get": {
+        "operationId": "fetchEquipments",
+        "summary": "查询训练器械",
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name_cn",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "current",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "equipments"
+        ]
+      }
+    },
+    "/api/equipments/{id}": {
+      "put": {
+        "operationId": "updateById",
+        "summary": "更新训练器械",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEquipmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "equipments"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "equipment API 文档",
+    "description": "与equipment相关的 API 文档",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "CreateEquipmentDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "训练器械英文名称"
+          },
+          "name_cn": {
+            "type": "string",
+            "description": "训练器械中文名称"
+          },
+          "image": {
+            "type": "string",
+            "description": "训练器械图片"
+          }
+        },
+        "required": [
+          "name",
+          "name_cn",
+          "image"
+        ]
+      },
+      "UpdateEquipmentDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "训练器械英文名称"
+          },
+          "name_cn": {
+            "type": "string",
+            "description": "训练器械中文名称"
+          },
+          "image": {
+            "type": "string",
+            "description": "训练器械图片"
+          }
+        }
+      }
+    }
+  }
+}

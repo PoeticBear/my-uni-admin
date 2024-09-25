@@ -1,0 +1,48 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/file/upload": {
+      "post": {
+        "operationId": "uploadFile",
+        "summary": "上传文件",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "文件上传",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "file"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "file API 文档",
+    "description": "与file相关的 API 文档",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {}
+  }
+}
