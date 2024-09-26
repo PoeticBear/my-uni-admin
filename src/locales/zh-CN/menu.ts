@@ -51,5 +51,7 @@ export default {
   'menu.editor.koni': '拓扑编辑器',
   'menu.workout':'训练',
   'menu.workout.equipment':'训练器械',
-  'menu.workout.muscle':'目标肌群'
+  'menu.workout.muscle':'目标肌群',
+  'menu.workout.exercise':'动作库',
+  'menu.workout.exercise.official':'官方动作库'
 };

@@ -39,7 +39,7 @@ export async function updateById(
   body: API.UpdateMuscleDto,
   options?: { [key: string]: any },
 ) {
-  const { _id: param0, ...queryParams } = params;
+  const { id: param0, ...queryParams } = params;
   return request<any>(`/api/muscles/${param0}`, {
     method: 'PUT',
     headers: {
@@ -61,7 +61,6 @@ export async function fetchBodyPart(options?: { [key: string]: any }) {
 
 /** 创建肌群数据 POST /api/muscles/create */
 export async function create(body: API.CreateMuscleDto, options?: { [key: string]: any }) {
-  console.log("create muscle body",body)
   return request<any>('/api/muscles/create', {
     method: 'POST',
     headers: {

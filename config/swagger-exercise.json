@@ -1,0 +1,420 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/exercises/create": {
+      "post": {
+        "operationId": "create",
+        "summary": "创建动作",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateExerciseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "exercises"
+        ]
+      }
+    },
+    "/api/exercises": {
+      "delete": {
+        "operationId": "deleteByIds",
+        "summary": "批量删除训练动作",
+        "parameters": [
+          {
+            "name": "ids",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "exercises"
+        ]
+      },
+      "get": {
+        "operationId": "fetchExercises",
+        "summary": "查询训练动作",
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name_cn",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bodyPart",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "primaryMuscle",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "equipment",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "difficulty",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "current",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "exercises"
+        ]
+      }
+    },
+    "/api/exercises/{id}": {
+      "put": {
+        "operationId": "updateById",
+        "summary": "更新训练动作",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateExerciseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "exercises"
+        ]
+      }
+    },
+    "/api/exercises/batch": {
+      "post": {
+        "operationId": "findManyByIds",
+        "summary": "批量查询数据",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "exercises"
+        ]
+      }
+    },
+    "/api/exercises/favorite": {
+      "post": {
+        "operationId": "favorite",
+        "summary": "收藏动作",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FavoriteExerciseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "exercises"
+        ]
+      },
+      "delete": {
+        "operationId": "removeFavorite",
+        "summary": "取消收藏",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveFavoriteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "exercises"
+        ]
+      }
+    },
+    "/api/exercises/favorites/{userId}": {
+      "get": {
+        "operationId": "findFavoritesByUser",
+        "summary": "查询用户收藏的动作",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "exercises"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "exercise API 文档",
+    "description": "与exercise相关的 API 文档",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "CreateExerciseDto": {
+        "type": "object",
+        "properties": {
+          "serial": {
+            "type": "string",
+            "description": "序号"
+          },
+          "name": {
+            "type": "string",
+            "description": "动作英文名"
+          },
+          "name_cn": {
+            "type": "string",
+            "description": "动作中文名"
+          },
+          "image": {
+            "type": "string",
+            "description": "动作图片"
+          },
+          "videos": {
+            "description": "动作视频",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "recordType": {
+            "type": "string",
+            "description": "记录类型"
+          },
+          "description": {
+            "type": "string",
+            "description": "动作描述"
+          },
+          "tips": {
+            "type": "string",
+            "description": "提示"
+          },
+          "referenceContent": {
+            "type": "string",
+            "description": "参考内容"
+          },
+          "commonMistakes": {
+            "type": "string",
+            "description": "常见错误"
+          },
+          "precautions": {
+            "type": "string",
+            "description": "注意事项"
+          },
+          "suitableFor": {
+            "type": "string",
+            "description": "适合人群"
+          },
+          "repetitions": {
+            "type": "number",
+            "description": "重复次数"
+          },
+          "restBetweenSets": {
+            "type": "number",
+            "description": "休息时间"
+          }
+        },
+        "required": [
+          "serial",
+          "name",
+          "name_cn",
+          "image",
+          "videos",
+          "recordType",
+          "description",
+          "tips",
+          "referenceContent",
+          "commonMistakes",
+          "precautions",
+          "suitableFor",
+          "repetitions",
+          "restBetweenSets"
+        ]
+      },
+      "UpdateExerciseDto": {
+        "type": "object",
+        "properties": {
+          "serial": {
+            "type": "string",
+            "description": "序号"
+          },
+          "name": {
+            "type": "string",
+            "description": "动作英文名"
+          },
+          "name_cn": {
+            "type": "string",
+            "description": "动作中文名"
+          },
+          "image": {
+            "type": "string",
+            "description": "动作图片"
+          },
+          "videos": {
+            "description": "动作视频",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "recordType": {
+            "type": "string",
+            "description": "记录类型"
+          },
+          "description": {
+            "type": "string",
+            "description": "动作描述"
+          },
+          "tips": {
+            "type": "string",
+            "description": "提示"
+          },
+          "referenceContent": {
+            "type": "string",
+            "description": "参考内容"
+          },
+          "commonMistakes": {
+            "type": "string",
+            "description": "常见错误"
+          },
+          "precautions": {
+            "type": "string",
+            "description": "注意事项"
+          },
+          "suitableFor": {
+            "type": "string",
+            "description": "适合人群"
+          },
+          "repetitions": {
+            "type": "number",
+            "description": "重复次数"
+          },
+          "restBetweenSets": {
+            "type": "number",
+            "description": "休息时间"
+          }
+        }
+      },
+      "FavoriteExerciseDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "RemoveFavoriteDto": {
+        "type": "object",
+        "properties": {}
+      }
+    }
+  }
+}

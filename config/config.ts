@@ -165,6 +165,12 @@ export default defineConfig({
       schemaPath:join(__dirname,'swagger-file.json'),
       mock:false,
       projectName:'file'
+    },
+    {
+      requestLibPath:"import { request } from '@umijs/max'",
+      schemaPath:join(__dirname,'swagger-exercise.json'),
+      mock:false,
+      projectName:'exercise'
     }
   ],
   mock: {
