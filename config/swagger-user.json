@@ -1,11 +1,21 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/api/user/register": {
+    "/api/user/create": {
       "post": {
-        "operationId": "register",
-        "summary": "注册用户",
+        "operationId": "create",
+        "summary": "新增用户",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""
@@ -16,17 +26,20 @@
         ]
       }
     },
-    "/api/user/{id}": {
+    "/api/user": {
       "delete": {
-        "operationId": "deleteUser",
-        "summary": "删除用户",
+        "operationId": "deleteByIds",
+        "summary": "批量删除用户",
         "parameters": [
           {
-            "name": "id",
+            "name": "ids",
             "required": true,
-            "in": "path",
+            "in": "query",
             "schema": {
-              "type": "string"
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           }
         ],
@@ -39,8 +52,56 @@
           "user"
         ]
       },
+      "get": {
+        "operationId": "fetchUsers",
+        "summary": "获取用户",
+        "parameters": [
+          {
+            "name": "username",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phone",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "current",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/api/user/{id}": {
       "put": {
-        "operationId": "updateUser",
+        "operationId": "updateById",
         "summary": "更新用户",
         "parameters": [
           {
@@ -52,6 +113,16 @@
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": ""
@@ -62,28 +133,13 @@
         ]
       }
     },
-    "/api/user/profile": {
-      "get": {
-        "operationId": "getProfile",
-        "summary": "获取用户资料",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "user"
-        ]
-      }
-    },
-    "/api/user/{username}": {
+    "/api/user/phone/{phone}": {
       "get": {
         "operationId": "getUser",
-        "summary": "获取用户数据",
+        "summary": "根据电话获取用户",
         "parameters": [
           {
-            "name": "username",
+            "name": "phone",
             "required": true,
             "in": "path",
             "schema": {
@@ -91,21 +147,6 @@
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "user"
-        ]
-      }
-    },
-    "/api/user": {
-      "get": {
-        "operationId": "findAll",
-        "summary": "获取全部用户",
-        "parameters": [],
         "responses": {
           "200": {
             "description": ""
@@ -126,6 +167,55 @@
   "tags": [],
   "servers": [],
   "components": {
-    "schemas": {}
+    "schemas": {
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "用户名称"
+          },
+          "password": {
+            "type": "string",
+            "description": "用户密码"
+          },
+          "phone": {
+            "type": "string",
+            "description": "手机号码"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "用户头像"
+          }
+        },
+        "required": [
+          "username",
+          "password",
+          "phone",
+          "avatar"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "用户名称"
+          },
+          "password": {
+            "type": "string",
+            "description": "用户密码"
+          },
+          "phone": {
+            "type": "string",
+            "description": "手机号码"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "用户头像"
+          }
+        }
+      }
+    }
   }
 }

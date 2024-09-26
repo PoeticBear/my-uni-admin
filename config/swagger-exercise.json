@@ -165,6 +165,36 @@
         ]
       }
     },
+    "/api/exercises/count": {
+      "get": {
+        "operationId": "countExercises",
+        "summary": "统计符合条件的动作总数",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "exercises"
+        ]
+      }
+    },
+    "/api/exercises/images-ratio": {
+      "get": {
+        "operationId": "countImagesRatio",
+        "summary": "统计已上传图片的动作数量占比",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "exercises"
+        ]
+      }
+    },
     "/api/exercises/batch": {
       "post": {
         "operationId": "findManyByIds",

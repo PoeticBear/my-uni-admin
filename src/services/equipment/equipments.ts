@@ -51,6 +51,14 @@ export async function updateById(
   });
 }
 
+/** 统计符合条件的训练器械总数 GET /api/equipments/count */
+export async function countEquipments(options?: { [key: string]: any }) {
+  return request<any>('/api/equipments/count', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** 创建训练器械 POST /api/equipments/create */
 export async function create(body: API.CreateEquipmentDto, options?: { [key: string]: any }) {
   return request<any>('/api/equipments/create', {

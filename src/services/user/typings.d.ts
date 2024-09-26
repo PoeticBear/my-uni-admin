@@ -1,13 +1,42 @@
 declare namespace API {
-  type deleteUserParams = {
-    id: string;
+  type CreateUserDto = {
+    /** 用户名称 */
+    username: string;
+    /** 用户密码 */
+    password: string;
+    /** 手机号码 */
+    phone: string;
+    /** 用户头像 */
+    avatar: string;
+  };
+
+  type deleteByIdsParams = {
+    ids: string[];
+  };
+
+  type fetchUsersParams = {
+    username: string;
+    phone: string;
+    current: number;
+    pageSize: number;
   };
 
   type getUserParams = {
-    username: string;
+    phone: string;
   };
 
-  type updateUserParams = {
+  type updateByIdParams = {
     id: string;
+  };
+
+  type UpdateUserDto = {
+    /** 用户名称 */
+    username?: string;
+    /** 用户密码 */
+    password?: string;
+    /** 手机号码 */
+    phone?: string;
+    /** 用户头像 */
+    avatar?: string;
   };
 }

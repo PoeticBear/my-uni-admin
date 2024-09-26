@@ -132,6 +132,21 @@
           "equipments"
         ]
       }
+    },
+    "/api/equipments/count": {
+      "get": {
+        "operationId": "countEquipments",
+        "summary": "统计符合条件的训练器械总数",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "equipments"
+        ]
+      }
     }
   },
   "info": {

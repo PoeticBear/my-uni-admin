@@ -29,10 +29,10 @@ TagSelectOption.isTagSelectOption = true;
 type TagSelectOptionElement = React.ReactElement<TagSelectOptionProps, typeof TagSelectOption>;
 
 export interface TagSelectProps {
-  onChange?: (value: (string | number)[]) => void;
+  onChange?: (value: string | number | undefined) => void;
   expandable?: boolean;
-  value?: (string | number)[];
-  defaultValue?: (string | number)[];
+  value?: string | number;
+  defaultValue?: string | number;
   style?: React.CSSProperties;
   hideCheckAll?: boolean;
   actionsText?: {
@@ -48,63 +48,46 @@ const TagSelect: FC<TagSelectProps> & {
   Option: typeof TagSelectOption;
 } = (props) => {
   const { styles } = useStyles();
-  const { children, hideCheckAll = false, className, style, expandable, actionsText = {} } = props;
+  const { children, className, style, expandable, actionsText = {} } = props;
   const [expand, setExpand] = useState<boolean>(false);
 
-  const [value, setValue] = useMergedState<(string | number)[]>(props.defaultValue || [], {
-    value: props.value,
-    defaultValue: props.defaultValue,
-    onChange: props.onChange,
-  });
+  const [value, setValue] = useMergedState<string | number | undefined>(
+    props.defaultValue || undefined,
+    {
+      value: props.value,
+      defaultValue: props.defaultValue,
+      onChange: props.onChange,
+    },
+  );
 
   const isTagSelectOption = (node: TagSelectOptionElement) =>
     node &&
     node.type &&
     (node.type.isTagSelectOption || node.type.displayName === 'TagSelectOption');
-  const getAllTags = () => {
-    const childrenArray = React.Children.toArray(children) as TagSelectOptionElement[];
-    const checkedTags = childrenArray
-      .filter((child) => isTagSelectOption(child))
-      .map((child) => child.props.value);
-    return checkedTags || [];
-  };
-  const onSelectAll = (checked: boolean) => {
-    let checkedTags: (string | number)[] = [];
-    if (checked) {
-      checkedTags = getAllTags();
-    }
-    setValue(checkedTags);
-  };
+
   const handleTagChange = (tag: string | number, checked: boolean) => {
-    const checkedTags: (string | number)[] = [...(value || [])];
-    const index = checkedTags.indexOf(tag);
-    if (checked && index === -1) {
-      checkedTags.push(tag);
-    } else if (!checked && index > -1) {
-      checkedTags.splice(index, 1);
+    if (checked) {
+      setValue(tag);
+    } else {
+      setValue(undefined); // 如果标签取消选中，则清空选中的值
     }
-    setValue(checkedTags);
   };
-  const checkedAll = getAllTags().length === value?.length;
-  const { expandText = '展开', collapseText = '收起', selectAllText = '全部' } = actionsText;
+
+  const { expandText = '展开', collapseText = '收起' } = actionsText;
   const cls = classNames(styles.tagSelect, className, {
     [styles.hasExpandTag]: expandable,
     [styles.expanded]: expand,
   });
+
   return (
     <div className={cls} style={style}>
-      {hideCheckAll ? null : (
-        <CheckableTag checked={checkedAll} key="tag-select-__all__" onChange={onSelectAll}>
-          {selectAllText}
-        </CheckableTag>
-      )}
       {children &&
         React.Children.map(children, (child: TagSelectOptionElement) => {
           if (isTagSelectOption(child)) {
             return React.cloneElement(child, {
               key: `tag-select-${child.props.value}`,
               value: child.props.value,
-              checked: value && value.indexOf(child.props.value) > -1,
+              checked: value === child.props.value, // 单选时，只有一个选项与当前选中的值相匹配
               onChange: handleTagChange,
             });
           }

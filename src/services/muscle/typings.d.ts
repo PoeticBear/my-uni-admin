@@ -14,6 +14,10 @@ declare namespace API {
     ids: string[];
   };
 
+  type fetchChildrenParams = {
+    id: string;
+  };
+
   type fetchMusclesParams = {
     name: string;
     name_cn: string;

@@ -40,41 +40,46 @@ export default [
         component: './user/register',
       },
       {
+        name: 'list',
+        icon: 'smile',
+        path: '/user/list',
+        component: './user/list',
+      },
+      {
         component: '404',
         // path: '/*',
       },
     ],
   },
-
-  // {
-  //   path: '/dashboard',
-  //   name: 'dashboard',
-  //   icon: 'dashboard',
-  //   routes: [
-  //     {
-  //       path: '/dashboard',
-  //       redirect: '/dashboard/analysis',
-  //     },
-  //     {
-  //       name: 'analysis',
-  //       icon: 'smile',
-  //       path: '/dashboard/analysis',
-  //       component: './dashboard/analysis',
-  //     },
-  //     {
-  //       name: 'monitor',
-  //       icon: 'smile',
-  //       path: '/dashboard/monitor',
-  //       component: './dashboard/monitor',
-  //     },
-  //     {
-  //       name: 'workplace',
-  //       icon: 'smile',
-  //       path: '/dashboard/workplace',
-  //       component: './dashboard/workplace',
-  //     },
-  //   ],
-  // },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    icon: 'dashboard',
+    routes: [
+      {
+        path: '/dashboard',
+        redirect: '/dashboard/analysis',
+      },
+      {
+        name: 'analysis',
+        icon: 'smile',
+        path: '/dashboard/analysis',
+        component: './dashboard/analysis',
+      },
+      // {
+      //   name: 'monitor',
+      //   icon: 'smile',
+      //   path: '/dashboard/monitor',
+      //   component: './dashboard/monitor',
+      // },
+      // {
+      //   name: 'workplace',
+      //   icon: 'smile',
+      //   path: '/dashboard/workplace',
+      //   component: './dashboard/workplace',
+      // },
+    ],
+  },
   {
     path: '/workout',
     name: 'workout',

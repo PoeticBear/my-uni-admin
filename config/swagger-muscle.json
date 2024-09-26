@@ -133,6 +133,45 @@
         ]
       }
     },
+    "/api/muscles/{id}/children": {
+      "get": {
+        "operationId": "fetchChildren",
+        "summary": "获取指定肌群的所有子肌群",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "muscles"
+        ]
+      }
+    },
+    "/api/muscles/count": {
+      "get": {
+        "operationId": "countMuscles",
+        "summary": "统计符合条件的肌群数量总数",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "muscles"
+        ]
+      }
+    },
     "/api/muscles/body-part": {
       "get": {
         "operationId": "fetchBodyPart",

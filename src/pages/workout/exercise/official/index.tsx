@@ -1,6 +1,9 @@
 import { fetchEquipments as fetchEquipmentService } from '@/services/equipment/equipments';
 import { fetchExercises as fetchExerciseService } from '@/services/exercise/exercises';
-import { fetchBodyPart as fetchBodyPartService } from '@/services/muscle/muscles';
+import {
+  fetchBodyPart as fetchBodyPartService,
+  fetchChildren as fetchChildrenService,
+} from '@/services/muscle/muscles';
 import { Card, Form, List, Typography } from 'antd';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -9,6 +12,7 @@ import { useEffect, useState } from 'react';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
 import useStyles from './style.style';
+import { filter } from 'lodash';
 
 dayjs.extend(relativeTime);
 
@@ -16,62 +20,44 @@ const FormItem = Form.Item;
 const { Paragraph } = Typography;
 // const getKey = (id: string, index: number) => `${id}-${index}`;
 
+interface FetchEquipmentParams {
+  name: string;
+  name_cn: string;
+  current: number;
+  pageSize: number;
+}
+
+interface FetchExerciseParams {
+  name: string;
+  name_cn: string;
+  bodyPart: string;
+  primaryMuscle: string;
+  equipment: string;
+  difficulty: string;
+  current: number;
+  pageSize: number;
+}
+
 const OfficialExercise: FC = () => {
   const { styles } = useStyles();
 
-  // 定义测试数据
-  // const testData = [
-  //   {
-  //     id: '1',
-  //     title: '项目一',
-  //     cover: 'https://gw.alipayobjects.com/zos/rmsportal/iXjVmWVHbCJAyqvDxdtx.png',
-  //     subDescription: '这是项目一的描述。',
-  //     updatedAt: new Date(),
-  //     members: [
-  //       {
-  //         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ZiESqWwCXBRQoaPONSJe.png',
-  //         name: '张三',
-  //       },
-  //       {
-  //         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ZiESqWwCXBRQoaPONSJe.png',
-  //         name: '李四',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: '2',
-  //     title: '项目二',
-  //     cover: 'https://gw.alipayobjects.com/zos/rmsportal/iXjVmWVHbCJAyqvDxdtx.png',
-  //     subDescription: '这是项目二的描述。',
-  //     updatedAt: new Date(),
-  //     members: [
-  //       {
-  //         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ZiESqWwCXBRQoaPONSJe.png',
-  //         name: '张三',
-  //       },
-  //       {
-  //         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ZiESqWwCXBRQoaPONSJe.png',
-  //         name: '李四',
-  //       },
-  //     ],
-  //   },
-  // ];
-
-  // 定义身体部位与肌肉群体的映射关系
-  // const muscleGroupMap = {
-  //   upperBody: ['三角肌', '肱二头肌', '肱三头肌'],
-  //   lowerBody: ['股四头肌', '腓肠肌', '臀大肌'],
-  //   back: ['斜方肌', '中背', '下背'],
-  //   core: ['腹肌', '腹外斜肌'],
-  // };
-
-  // useState 管理身体部位和肌肉群体
-  // const [selectedBodyPart, setSelectedBodyPart] = useState<string | null>(null);
   // const [availableMuscleGroups, setAvailableMuscleGroups] = useState<string[]>([]);
 
   const [bodyPartOptions, setBodyPartOptions] = useState<any[]>([]);
+  const [primaryMuscleOptions, setPrimaryMuscleOptions] = useState<any[]>([]);
   const [equipmentOptions, setEquipmentOptions] = useState<any[]>([]);
   const [exercises, setExercises] = useState<any[]>([]);
+  const [filters, setFilters] = useState<FetchExerciseParams>({
+    name: '',
+    name_cn: '',
+    bodyPart: '',
+    primaryMuscle: '',
+    equipment: '',
+    difficulty: '',
+    current: 1,
+    pageSize: 9999,
+  });
+
   useEffect(() => {
     const fetchBodyPart = async () => {
       try {
@@ -85,48 +71,79 @@ const OfficialExercise: FC = () => {
 
     const fetchEquipment = async () => {
       try {
-        const response = await fetchEquipmentService({
+        const params: FetchEquipmentParams = {
           name: '',
           name_cn: '',
           current: 1,
           pageSize: 9999,
-        });
+        };
+
+        const response = await fetchEquipmentService(params);
         console.log('设备', response);
         if (response && response.result) {
           setEquipmentOptions(response.result.equipments);
         }
       } catch (error) {}
     };
-
-    const fetchExercise = async () => {
-      try {
-        const response = await fetchExerciseService({
-          name: '',
-          name_cn: '',
-          bodyPart: '',
-          primaryMuscle: '',
-          equipment: '',
-          difficulty: '',
-          current: 1,
-          pageSize: 9999,
-        });
-        console.log('动作', response);
-        if (response && response.result) {
-          setExercises(response.result.exercises);
-        }
-      } catch (error) {}
-    };
-
-    fetchExercise();
     fetchBodyPart();
     fetchEquipment();
   }, []);
 
-  // // 当选择身体部位时更新肌肉群体
-  // const handleBodyPartChange = (value: string) => {
-  //   setSelectedBodyPart(value);
-  //   setAvailableMuscleGroups(muscleGroupMap[value] || []);
-  // };
+  useEffect(() => {
+
+    console.log('filters', filters);
+    const fetchExercise = async () => {
+      try {
+        const response = await fetchExerciseService(filters);
+        console.log('动作', response);
+        if (response && response.result) {
+          setExercises(response.result.exercises);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchExercise();
+  }, [filters]); // 当 filters 改变时，重新调用获取动作的接口
+
+  // 当选择身体部位时更新肌肉群体
+  const handleBodyPartChange = async (value: string | number | undefined) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      bodyPart: value as string, // 更新 bodyPart
+    }));
+
+    console.log('选中的身体部位是', value);
+    if (!value) {
+      setPrimaryMuscleOptions([]);
+      return;
+    }
+    const res = await fetchChildrenService({ id: value as string });
+    console.log('肌肉群体数据', res.result);
+    setPrimaryMuscleOptions(res.result);
+  };
+
+  const handlePrimaryMuscleChange = async (value: string | number | undefined) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      primaryMuscle: value as string, // 更新 primaryMuscle
+    }));
+  };
+
+  const handleEquipmentChange = (value: string | number | undefined) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      equipment: value as string, // 更新 equipment
+    }));
+  };
+
+  const handleDifficultyChange = (value: string | number | undefined) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      difficulty: value as string, // 更新 difficulty
+    }));
+  };
 
   // 使用从服务端获取的数据渲染卡片
   const cardList = exercises && (
@@ -147,7 +164,9 @@ const OfficialExercise: FC = () => {
           <Card
             className={styles.card}
             hoverable
-            cover={<img alt={item.name_cn} src={item.image || 'https://via.placeholder.com/320x180'} />}
+            cover={
+              <img alt={item.name_cn} src={item.image || 'https://via.placeholder.com/320x180'} />
+            }
           >
             <Card.Meta
               title={<a>{item.name_cn}</a>}
@@ -190,21 +209,9 @@ const OfficialExercise: FC = () => {
             }}
           >
             <FormItem name="bodyPart">
-              <TagSelect>
-                {/* <TagSelect.Option value="upperBody" key="upperBody">
-                  上肢
-                </TagSelect.Option>
-                <TagSelect.Option value="lowerBody" key="lowerBody">
-                  下肢
-                </TagSelect.Option>
-                <TagSelect.Option value="back" key="back">
-                  背部
-                </TagSelect.Option>
-                <TagSelect.Option value="core" key="core">
-                  核心
-                </TagSelect.Option> */}
+              <TagSelect onChange={handleBodyPartChange}>
                 {bodyPartOptions.map((bodyPart) => (
-                  <TagSelect.Option value={bodyPart.name} key={bodyPart._id}>
+                  <TagSelect.Option value={bodyPart._id} key={bodyPart._id}>
                     {bodyPart.name_cn}
                   </TagSelect.Option>
                 ))}
@@ -221,28 +228,28 @@ const OfficialExercise: FC = () => {
             }}
           >
             <FormItem name="muscleGroup">
-              {/* <TagSelect>
-                {availableMuscleGroups.length > 0 ? (
-                  availableMuscleGroups.map((muscle) => (
-                    <TagSelect.Option value={muscle} key={muscle}>
-                      {muscle}
+              <TagSelect onChange={handlePrimaryMuscleChange}>
+                {primaryMuscleOptions.length > 0
+                  ? primaryMuscleOptions.map((muscle) => (
+                      <TagSelect.Option value={muscle._id} key={muscle._id}>
+                        {muscle.name_cn}
+                      </TagSelect.Option>
+                    ))
+                  : (
+                    <TagSelect.Option value="" key="">
+                      暂无
                     </TagSelect.Option>
-                  ))
-                ) : (
-                  <TagSelect.Option disabled key="no-selection">
-                    请选择身体部位
-                  </TagSelect.Option>
-                )}
-              </TagSelect> */}
+                  )}
+              </TagSelect>
             </FormItem>
           </StandardFormRow>
 
           {/* 筛选条件 - 训练器械 */}
           <StandardFormRow title="训练器械" block style={{ paddingBottom: 8 }}>
             <FormItem name="equipment">
-              <TagSelect>
+              <TagSelect onChange={handleEquipmentChange}>
                 {equipmentOptions.map((equipment) => (
-                  <TagSelect.Option value={equipment.name} key={equipment._id}>
+                  <TagSelect.Option value={equipment._id} key={equipment._id}>
                     {equipment.name_cn}
                   </TagSelect.Option>
                 ))}
@@ -253,7 +260,7 @@ const OfficialExercise: FC = () => {
           {/* 筛选条件 - 训练难度 */}
           <StandardFormRow title="训练难度" block style={{ paddingBottom: 8 }}>
             <FormItem name="difficulty">
-              <TagSelect>
+              <TagSelect onChange={handleDifficultyChange}>
                 <TagSelect.Option value="easy" key="easy">
                   简单
                 </TagSelect.Option>

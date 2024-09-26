@@ -1,9 +1,8 @@
 import { AvatarDropdown, AvatarName, Footer, Question, SelectLang } from '@/components';
-import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
 import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
-import { history, Link } from '@umijs/max';
+import { history } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
 // import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
@@ -16,22 +15,15 @@ const loginPath = '/user/login';
  * */
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
-  currentUser?: API.CurrentUser;
+  currentUser?: API.CreateUserDto;
   loading?: boolean;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  fetchUserInfo?: () => Promise<API.CreateUserDto | undefined>;
   fuckManCity?: () => void;
 }> {
   // 定义fetchUserInfo
   const fetchUserInfo = async () => {
     try {
-      // const msg = await queryCurrentUser({
-      //   skipErrorHandler: true,
-      // });
-      // return msg.data;
-
-      const response = await getUser({ username: 'admin' });
-
-      console.log('获取用户信息', response);
+      const response = await getUser({ phone: '18012345678' });
       return response.result;
     } catch (error) {
       history.push(loginPath);

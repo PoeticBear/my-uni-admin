@@ -59,6 +59,14 @@ export async function findManyByIds(options?: { [key: string]: any }) {
   });
 }
 
+/** 统计符合条件的动作总数 GET /api/exercises/count */
+export async function countExercises(options?: { [key: string]: any }) {
+  return request<any>('/api/exercises/count', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** 创建动作 POST /api/exercises/create */
 export async function create(body: API.CreateExerciseDto, options?: { [key: string]: any }) {
   return request<any>('/api/exercises/create', {
@@ -108,6 +116,14 @@ export async function findFavoritesByUser(
   return request<any>(`/api/exercises/favorites/${param0}`, {
     method: 'GET',
     params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
+/** 统计已上传图片的动作数量占比 GET /api/exercises/images-ratio */
+export async function countImagesRatio(options?: { [key: string]: any }) {
+  return request<any>('/api/exercises/images-ratio', {
+    method: 'GET',
     ...(options || {}),
   });
 }
