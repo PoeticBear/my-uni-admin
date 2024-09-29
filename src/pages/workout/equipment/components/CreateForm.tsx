@@ -20,7 +20,9 @@ const CreateForm: React.FC<CreateFormProps> = ({
 
   const handleFinish = async (values: any) => {
     console.log('values', values);
-    const fileObj = values.upload[0].originFileObj;
+    const uploads = values.upload;
+    const uploadItem = uploads ? uploads[0] : null;
+    const fileObj = uploadItem ? uploadItem.originFileObj : null;
     if (fileObj) {
       const formData = new FormData();
       formData.append('file', fileObj);
@@ -38,6 +40,8 @@ const CreateForm: React.FC<CreateFormProps> = ({
       } catch (error) {
         console.error('文件上传失败：', error);
       }
+    } else {
+      await onSubmit(values);
     }
   };
 
@@ -67,12 +71,12 @@ const CreateForm: React.FC<CreateFormProps> = ({
       <ProFormText
         label="训练器械英文名称"
         name="name"
-        rules={[
-          {
-            required: true,
-            message: '训练器械英文名称为必填项',
-          },
-        ]}
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: '训练器械英文名称为必填项',
+        //   },
+        // ]}
       />
       <ProFormText
         label="训练器械中文名称"
@@ -105,12 +109,12 @@ const CreateForm: React.FC<CreateFormProps> = ({
             setFileList(newFileList);
           },
         }}
-        rules={[
-          {
-            required: true,
-            message: '训练器械图片为必填项',
-          },
-        ]}
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: '训练器械图片为必填项',
+        //   },
+        // ]}
       />
     </ModalForm>
   );

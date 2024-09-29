@@ -53,7 +53,9 @@ const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmi
 
   const handleFinish = async (values: any) => {
     console.log('创建肌群数据入参：', values);
-    const fileObj = values.upload[0].originFileObj;
+    const uploads = values.upload;
+    const uploadItem = uploads ? uploads[0] : null;
+    const fileObj = uploadItem ? uploadItem.originFileObj : null;
     if (fileObj) {
       const formData = new FormData();
       formData.append('file', fileObj);
@@ -63,7 +65,6 @@ const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmi
           // 上传成功，处理返回的 URL
           console.log('文件上传成功，访问 URL：', response.result.fileUrl);
         }
-
         const formValues = {
           name: values.name,
           name_cn: values.name_cn,
@@ -77,6 +78,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmi
       } catch (error) {
         console.error('文件上传失败：', error);
       }
+    } else {
+      const formValues = {
+        name: values.name,
+        name_cn: values.name_cn,
+        parent: values.parent.value,
+        image: "", // 将上传的图片 URL 添加到表单中
+      };
+      await onSubmit(formValues);
     }
   };
 
@@ -98,22 +107,22 @@ const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmi
         fieldProps={{
           labelInValue: true, // 确保选择时返回 label 和 value 对象
         }}
-        rules={[
-          {
-            required: true,
-            message: '父级肌群（身体部位）为必填项',
-          },
-        ]}
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: '父级肌群（身体部位）为必填项',
+        //   },
+        // ]}
       />
       <ProFormText
         label="肌群英文名称"
         name="name"
-        rules={[
-          {
-            required: true,
-            message: '肌群英文名称为必填项',
-          },
-        ]}
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: '肌群英文名称为必填项',
+        //   },
+        // ]}
       />
       <ProFormText
         label="肌群中文名称"
@@ -145,12 +154,12 @@ const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmi
             setFileList(newFileList);
           },
         }}
-        rules={[
-          {
-            required: true,
-            message: '肌群图片为必填项',
-          },
-        ]}
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: '肌群图片为必填项',
+        //   },
+        // ]}
       />
     </ModalForm>
   );

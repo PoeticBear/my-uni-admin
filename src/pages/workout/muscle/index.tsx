@@ -124,15 +124,12 @@ const TableList: React.FC = () => {
       dataIndex: 'image',
       valueType: 'text',
       search: false,
-      render: (text) => (
-        // <img
-        //   src={text} // 使用图片地址
-        //   alt="器械图片"
-        //   style={{ width: 20, height: 20, objectFit: 'cover' }} // 设置图片样式
-        // />
-
-        <Image width={20} src={text?.toString()} />
-      ),
+      render: (text) =>
+        (text?.toString().startsWith('http') || text?.toString().startsWith('https')) ? (
+          <Image width={20} src={text?.toString()} />
+        ) : (
+          <span style={{ color: 'gray' }}>未上传图片</span> // 图片为空时显示提示文本
+        ),
     },
     {
       title: '操作',

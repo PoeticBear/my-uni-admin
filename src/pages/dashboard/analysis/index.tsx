@@ -35,7 +35,7 @@ const Analysis: FC<AnalysisProps> = () => {
       const result = res.result;
       setTotalExercises(result.totalExercises);
       setExercisesWithImages(result.exercisesWithImages);
-      setRatio(result.ratio.toFixed(2));
+      setRatio(result.ratio.toFixed(2) * 100);
     }
 
     fetchImagesRatio();
