@@ -34,7 +34,8 @@ const CreateForm: React.FC<CreateFormProps> = ({
         }
         const formValues = {
           ...values,
-          image: response.result.fileUrl, // 将上传的图片 URL 添加到表单中
+          image: response.result.gifUrl,
+          videos: [response.result.fileUrl], // 上传成功后将新视频的 URL 存入表单
         };
         await onSubmit(formValues);
       } catch (error) {
@@ -56,16 +57,26 @@ const CreateForm: React.FC<CreateFormProps> = ({
       onFinish={handleFinish}
       initialValues={{
         ...initialValues,
-        image: initialValues?.image
-          ? [
-              {
-                uid: '-1',
-                name: 'image.png',
-                status: 'done',
-                url: initialValues.image,
-              },
-            ]
-          : [],
+        // image: initialValues?.image
+        //   ? [
+        //       {
+        //         uid: '-1',
+        //         name: 'image.png',
+        //         status: 'done',
+        //         url: initialValues.image,
+        //       },
+        //     ]
+        //   : [],
+        // videos: initialValues?.videos
+        //   ? [
+        //       {
+        //         uid: '-1',
+        //         name: 'video.mp4',
+        //         status: 'done',
+        //         url: initialValues.videos[0],
+        //       },
+        //     ]
+        //   : [],
       }}
     >
       <ProFormText
@@ -78,12 +89,9 @@ const CreateForm: React.FC<CreateFormProps> = ({
           },
         ]}
       />
-      <ProFormText
-        label="训练动作英文名称"
-        name="name"
-      />
+      <ProFormText label="训练动作英文名称" name="name" />
 
-      <ProFormUploadButton
+      {/* <ProFormUploadButton
         title="动作图片"
         label="动作图片"
         max={1}
@@ -104,7 +112,42 @@ const CreateForm: React.FC<CreateFormProps> = ({
             setFileList(newFileList);
           },
         }}
+      /> */}
+
+      {/* 视频预览与上传 */}
+      <ProFormUploadButton
+        title="训练动作视频"
+        label="训练动作视频"
+        name="upload"
+        max={1}
+        fieldProps={{
+          name: 'file',
+          listType: 'picture-card',
+          defaultFileList: fileList,
+          maxCount: 1,
+          beforeUpload: (file) => {
+            setFileList([...fileList, file]);
+            return false; // 防止自动上传
+          },
+          onRemove: (file) => {
+            const index = fileList.indexOf(file);
+            const newFileList = fileList.slice();
+            newFileList.splice(index, 1);
+            setFileList(newFileList);
+          },
+        }}
       />
+
+      {/* 显示视频预览 */}
+      {fileList.length > 0 && (
+        <div>
+          <video
+            src={fileList[0].url} // 使用第一个视频的 URL
+            controls
+            style={{ width: '100%', maxHeight: '300px', objectFit: 'cover' }}
+          />
+        </div>
+      )}
     </ModalForm>
   );
 };

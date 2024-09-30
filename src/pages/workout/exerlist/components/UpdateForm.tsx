@@ -38,7 +38,9 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   }, [values.videos, props.updateModalVisible]);
 
   const handleFinish = async (values: any) => {
-    const fileObj = values.upload[0]?.originFileObj;
+    const uploads = values.upload;
+    const uploadItem = uploads ? uploads[0] : null;
+    const fileObj = uploadItem ? uploadItem.originFileObj : null;
     if (fileObj) {
       const formData = new FormData();
       formData.append('file', fileObj);
