@@ -34,6 +34,7 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Dat
   useEffect(() => {
     const fetchExerciseSum = async () => {
       const result = await countExercises();
+      console.log("动作总数",result);
       setExerciseSum(result.result);
     };
 

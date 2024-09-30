@@ -146,10 +146,10 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: API.LoginParams) => {
     try {
       console.log('handleSubmit', values);
-      const { username, password } = values;
+      const { phone, password } = values;
       const response = await login({
         data: {
-          username,
+          phone,
           password,
         },
       });
@@ -253,22 +253,22 @@ const Login: React.FC = () => {
           {type === 'account' && (
             <>
               <ProFormText
-                name="username"
+                name="phone"
                 fieldProps={{
                   size: 'large',
                   prefix: <UserOutlined />,
                 }}
                 placeholder={intl.formatMessage({
-                  id: 'pages.login.username.placeholder',
-                  defaultMessage: '用户名: admin or user',
+                  id: 'pages.login.phone.placeholder',
+                  defaultMessage: '手机号码: 18012345678',
                 })}
                 rules={[
                   {
                     required: true,
                     message: (
                       <FormattedMessage
-                        id="pages.login.username.required"
-                        defaultMessage="请输入用户名!"
+                        id="pages.login.phone.required"
+                        defaultMessage="请输入用户手机号!"
                       />
                     ),
                   },

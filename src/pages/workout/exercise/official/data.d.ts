@@ -30,3 +30,13 @@ export interface ListItemDataType {
   content: string;
   members: Member[];
 }
+
+
+export type TableListItem = {
+  id:string;
+  key:number;
+  name: string;
+  name_cn: string;
+  image: string;
+  videos:string[];
+};

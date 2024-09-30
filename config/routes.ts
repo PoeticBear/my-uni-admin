@@ -100,16 +100,22 @@ export default [
       {
         name:'exercise',
         icon:'smile',
-        path:'/workout/exercise',
-        component:'./workout/exercise',
-        routes:[
-          {
-            name:"official",
-            path:'/workout/exercise/official',
-            component:'./workout/exercise/official'
-          }
-        ]
-      }
+        path:'/workout/exerlist',
+        component:'./workout/exerlist',
+      },
+      // {
+      //   name:'exercise',
+      //   icon:'smile',
+      //   path:'/workout/exercise',
+      //   component:'./workout/exercise',
+      //   routes:[
+      //     {
+      //       name:"official",
+      //       path:'/workout/exercise/official',
+      //       component:'./workout/exercise/official'
+      //     }
+      //   ]
+      // }
     ],
   },
 
