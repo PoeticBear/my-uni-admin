@@ -8,7 +8,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { Button, Drawer, Image, message, Modal } from 'antd';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import CreateForm from './components/CreateForm';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
@@ -99,6 +99,14 @@ const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<TableListItem>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
+
+
+  useEffect(() => {
+    const videoElement = document.getElementById('video-player');
+    if (videoElement) {
+      videoElement.playbackRate = 1.5; // 设置默认播放速率为 1.5 倍
+    }
+  }, [currentVideoUrl]);
 
   const columns: ProColumns<TableListItem>[] = [
     {
@@ -233,8 +241,8 @@ const TableList: React.FC = () => {
           },
         }}
         pagination={{
-          pageSizeOptions: ['10', '20', '50', '100', '200', '500'], // 可选的每页显示数量
-          defaultPageSize: 500, // 默认的每页显示数量
+          pageSizeOptions: ['10', '20', '50', '100', '200', '500','1000'], // 可选的每页显示数量
+          defaultPageSize: 1000, // 默认的每页显示数量
           showSizeChanger: true, // 是否可以改变每页显示的数量
           showQuickJumper: true, // 是否可以快速跳页
         }}
@@ -336,6 +344,7 @@ const TableList: React.FC = () => {
       >
         {currentVideoUrl && (
           <video
+          id="video-player"
             src={currentVideoUrl}
             style={{ width: '100%', height: 'auto' }} // 视频全屏显示
             controls // 显示控制按钮
@@ -343,6 +352,7 @@ const TableList: React.FC = () => {
           />
         )}
       </Modal>
+
     </PageContainer>
   );
 };

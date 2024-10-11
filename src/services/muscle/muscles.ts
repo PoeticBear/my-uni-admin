@@ -40,6 +40,7 @@ export async function updateById(
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
+  console.log("updateById",params, body);
   return request<any>(`/api/muscles/${param0}`, {
     method: 'PUT',
     headers: {

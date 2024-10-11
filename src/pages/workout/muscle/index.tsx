@@ -47,12 +47,14 @@ const handleAdd = async (fields: TableListItem) => {
 const handleUpdate = async (fields: FormValueType, currentRow?: TableListItem) => {
   const hide = message.loading('正在更新');
   try {
+    console.log('handleUpdate fields: FormValueType', fields);
+    console.log('handleUpdate currentRow: FormValueType', currentRow);
     await updateById(
       { _id: currentRow?._id },
       {
+        name_cn: fields.name_cn,
         parent: fields.parent,
         name: fields.name,
-        name_cn: fields.name_cn,
         image: fields.image,
       },
     );
