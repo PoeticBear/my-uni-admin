@@ -1,6 +1,12 @@
 import { uploadFile } from '@/services/file/file';
-import { ModalForm, ProFormText, ProFormUploadButton } from '@ant-design/pro-components';
-import { UploadFile } from 'antd';
+import {
+  ModalForm,
+  ProFormSelect,
+  ProFormText,
+  ProFormTextArea,
+  ProFormUploadButton,
+} from '@ant-design/pro-components';
+import { Col, Row, UploadFile } from 'antd';
 import React, { useState } from 'react';
 
 type CreateFormProps = {
@@ -8,6 +14,10 @@ type CreateFormProps = {
   onCancel: () => void;
   onSubmit: (values: any) => Promise<boolean>;
   initialValues?: any;
+  bodyPartsOptions: { label: string; value: string }[]; // 传入的身体部位选项
+  primaryMusclesOptions: { label: string; value: string }[];
+  secondaryMusclesOptions: { label: string; value: string }[];
+  equipmentsOptions: { label: string; value: string }[]; // 传入的训练器械选项
 };
 
 const CreateForm: React.FC<CreateFormProps> = ({
@@ -15,6 +25,10 @@ const CreateForm: React.FC<CreateFormProps> = ({
   onCancel,
   onSubmit,
   initialValues,
+  bodyPartsOptions,
+  primaryMusclesOptions,
+  secondaryMusclesOptions,
+  equipmentsOptions,
 }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -57,96 +71,115 @@ const CreateForm: React.FC<CreateFormProps> = ({
       onFinish={handleFinish}
       initialValues={{
         ...initialValues,
-        // image: initialValues?.image
-        //   ? [
-        //       {
-        //         uid: '-1',
-        //         name: 'image.png',
-        //         status: 'done',
-        //         url: initialValues.image,
-        //       },
-        //     ]
-        //   : [],
-        // videos: initialValues?.videos
-        //   ? [
-        //       {
-        //         uid: '-1',
-        //         name: 'video.mp4',
-        //         status: 'done',
-        //         url: initialValues.videos[0],
-        //       },
-        //     ]
-        //   : [],
       }}
     >
-      <ProFormText
-        label="训练动作中文名称"
-        name="name_cn"
-        rules={[
-          {
-            required: true,
-            message: '训练动作中文名称为必填项',
-          },
-        ]}
-      />
-      <ProFormText label="训练动作英文名称" name="name" />
-
-      {/* <ProFormUploadButton
-        title="动作图片"
-        label="动作图片"
-        max={1}
-        name="upload"
-        fieldProps={{
-          name: 'file',
-          listType: 'picture-card',
-
-          beforeUpload: (file) => {
-            console.log('执行了beforeUpload');
-            setFileList([...fileList, file]);
-            return false;
-          },
-          onRemove: (file) => {
-            const index = fileList.indexOf(file);
-            const newFileList = fileList.slice();
-            newFileList.splice(index, 1);
-            setFileList(newFileList);
-          },
-        }}
-      /> */}
-
-      {/* 视频预览与上传 */}
-      <ProFormUploadButton
-        title="训练动作视频"
-        label="训练动作视频"
-        name="upload"
-        max={1}
-        fieldProps={{
-          name: 'file',
-          listType: 'picture-card',
-          defaultFileList: fileList,
-          maxCount: 1,
-          beforeUpload: (file) => {
-            setFileList([...fileList, file]);
-            return false; // 防止自动上传
-          },
-          onRemove: (file) => {
-            const index = fileList.indexOf(file);
-            const newFileList = fileList.slice();
-            newFileList.splice(index, 1);
-            setFileList(newFileList);
-          },
-        }}
-      />
-
-      {/* 显示视频预览 */}
-      {fileList.length > 0 && (
-        <div>
-          <video
-            src={fileList[0].url} // 使用第一个视频的 URL
-            controls
-            style={{ width: '100%', maxHeight: '300px', objectFit: 'cover' }}
+      <Row gutter={24}>
+        <Col span={8}>
+          <ProFormText
+            label="训练动作中文名称"
+            name="name_cn"
+            rules={[
+              {
+                required: true,
+                message: '训练动作中文名称为必填项',
+              },
+            ]}
           />
-        </div>
+        </Col>
+        <Col span={8}>
+          <ProFormText label="训练动作英文名称" name="name" />
+        </Col>
+        <Col span={8}>
+          <ProFormText label="动作编号" name="serial" />
+        </Col>
+      </Row>
+
+      <Row gutter={24}>
+        <Col span={8}>
+          <ProFormSelect
+            label="身体部位"
+            name="bodyParts"
+            options={bodyPartsOptions}
+            placeholder="请选择身体部位"
+          />
+        </Col>
+        <Col span={8}>
+          <ProFormSelect
+            label="主要肌肉群"
+            name="primaryMuscles"
+            options={primaryMusclesOptions}
+            placeholder="请选择主要肌肉群"
+          />
+        </Col>
+        <Col span={8}>
+          <ProFormSelect
+            label="次要肌肉群"
+            name="secondaryMuscles"
+            options={secondaryMusclesOptions}
+            placeholder="请选择次要肌肉群"
+          />
+        </Col>
+      </Row>
+
+      <Row gutter={24}>
+        <Col span={8}>
+          <ProFormSelect
+            label="训练器械"
+            name="equipments"
+            options={equipmentsOptions}
+            placeholder="请选择训练器械"
+          />
+        </Col>
+        <Col span={8}>
+          <ProFormTextArea label="常见错误" name="commonMistakes" placeholder="请输入常见错误" />
+        </Col>
+        <Col span={8}>
+          <ProFormTextArea label="注意事项" name="precautions" placeholder="请输入注意事项" />
+        </Col>
+      </Row>
+
+      <Row gutter={24}>
+        <Col span={12}>
+          <ProFormTextArea label="适合人群" name="suitableFor" placeholder="请输入适合人群" />
+        </Col>
+        <Col span={12}>
+          <ProFormUploadButton
+            title="训练动作视频"
+            label="训练动作视频"
+            name="upload"
+            max={1}
+            fieldProps={{
+              name: 'file',
+              listType: 'picture-card',
+              defaultFileList: fileList,
+              maxCount: 1,
+              beforeUpload: (file) => {
+                setFileList([...fileList, file]);
+                return false;
+              },
+              onRemove: (file) => {
+                const index = fileList.indexOf(file);
+                const newFileList = fileList.slice();
+                newFileList.splice(index, 1);
+                setFileList(newFileList);
+              },
+            }}
+          />
+        </Col>
+      </Row>
+
+      {fileList.length > 0 && (
+        <Row>
+          <Col span={24}>
+            <div>
+              <video
+                src={fileList[0].url}
+                controls
+                style={{ width: '100%', maxHeight: '300px', objectFit: 'cover' }}
+              />
+            </div>
+          </Col>
+        </Row>
       )}
     </ModalForm>
   );

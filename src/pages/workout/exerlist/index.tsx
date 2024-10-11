@@ -115,10 +115,22 @@ const TableList: React.FC = () => {
       width: 200,
     },
     {
-      title: '是否唯一',
+      title: '中文名唯一',
       dataIndex: 'isUnique',
       valueType: 'text',
+      search: false,
       render: (isUnique: boolean) => (isUnique ? '是' : '否'), // 根据布尔值显示是/否
+      filters: [
+        {
+          text: '是',
+          value: true,
+        },
+        {
+          text: '否',
+          value: false,
+        },
+      ],
+      onFilter: (value, record) => record.isUnique === value, // 根据传入的 value 过滤 isUnique 字段
     },
     {
       title: '动作英文名称',
@@ -135,6 +147,7 @@ const TableList: React.FC = () => {
       title: '身体部位',
       dataIndex: 'bodyParts',
       valueType: 'text',
+      search: false,
       render: (bodyParts: Array<{ name_cn: string }> = []) => {
         // 使用 map 提取每个对象的 name_cn 字段并通过逗号拼接
         const names = bodyParts.map((part) => part.name_cn).join(', ');
@@ -145,6 +158,7 @@ const TableList: React.FC = () => {
       title: '训练器械',
       dataIndex: 'equipments',
       valueType: 'text',
+      search: false,
       render: (equipments: Array<{ name_cn: string }> = []) => {
         // 使用 map 提取每个对象的 name_cn 字段并通过逗号拼接
         const names = equipments.map((part) => part.name_cn).join(', ');
@@ -255,6 +269,7 @@ const TableList: React.FC = () => {
           const response = await fetchExercises({
             name: params.name || '', // 过滤条件：器械英文名称
             name_cn: params.name_cn || '', // 过滤条件：器械中文名称
+            serial : params.serial || '',
             current: params.current || 1, // 分页参数：当前页码
             pageSize: params.pageSize || 50, // 分页参数：每页条数
           });

@@ -37,6 +37,13 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     }
   }, [values.videos, props.updateModalVisible]);
 
+  useEffect(() => {
+    const videoElement = document.getElementById('video-player');
+    if (videoElement) {
+      videoElement.playbackRate = 1.5; // 设置默认播放速率为 1.5 倍
+    }
+  }, [fileList]);
+
   const handleFinish = async (values: any) => {
     const uploads = values.upload;
     const uploadItem = uploads ? uploads[0] : null;
@@ -123,9 +130,12 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       {fileList.length > 0 && (
         <div>
           <video
+          id="video-player"
             src={fileList[0].url} // 使用第一个视频的 URL
             controls
-            style={{ width: '100%', maxHeight: '300px', objectFit: 'cover' }}
+            style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }}
+            autoPlay
+            loop
           />
         </div>
       )}
