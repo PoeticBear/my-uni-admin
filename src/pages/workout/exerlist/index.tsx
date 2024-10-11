@@ -100,7 +100,6 @@ const TableList: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<TableListItem>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
 
-
   useEffect(() => {
     const videoElement = document.getElementById('video-player');
     if (videoElement) {
@@ -113,11 +112,44 @@ const TableList: React.FC = () => {
       title: '动作中文名称',
       dataIndex: 'name_cn',
       valueType: 'text',
+      width: 200,
+    },
+    {
+      title: '是否唯一',
+      dataIndex: 'isUnique',
+      valueType: 'text',
+      render: (isUnique: boolean) => (isUnique ? '是' : '否'), // 根据布尔值显示是/否
     },
     {
       title: '动作英文名称',
       dataIndex: 'name',
       valueType: 'text',
+      width: 200,
+    },
+    {
+      title: '动作编号',
+      dataIndex: 'serial',
+      valueType: 'text',
+    },
+    {
+      title: '身体部位',
+      dataIndex: 'bodyParts',
+      valueType: 'text',
+      render: (bodyParts: Array<{ name_cn: string }> = []) => {
+        // 使用 map 提取每个对象的 name_cn 字段并通过逗号拼接
+        const names = bodyParts.map((part) => part.name_cn).join(', ');
+        return names || '未知部位';
+      },
+    },
+    {
+      title: '训练器械',
+      dataIndex: 'equipments',
+      valueType: 'text',
+      render: (equipments: Array<{ name_cn: string }> = []) => {
+        // 使用 map 提取每个对象的 name_cn 字段并通过逗号拼接
+        const names = equipments.map((part) => part.name_cn).join(', ');
+        return names || '未知器械';
+      },
     },
     {
       title: '图片',
@@ -241,8 +273,8 @@ const TableList: React.FC = () => {
           },
         }}
         pagination={{
-          pageSizeOptions: ['10', '20', '50', '100', '200', '500','1000'], // 可选的每页显示数量
-          defaultPageSize: 1000, // 默认的每页显示数量
+          pageSizeOptions: ['10', '20', '50', '100','1000'], // 可选的每页显示数量
+          defaultPageSize: 50, // 默认的每页显示数量
           showSizeChanger: true, // 是否可以改变每页显示的数量
           showQuickJumper: true, // 是否可以快速跳页
         }}
@@ -344,7 +376,7 @@ const TableList: React.FC = () => {
       >
         {currentVideoUrl && (
           <video
-          id="video-player"
+            id="video-player"
             src={currentVideoUrl}
             style={{ width: '100%', height: 'auto' }} // 视频全屏显示
             controls // 显示控制按钮
@@ -353,7 +385,6 @@ const TableList: React.FC = () => {
           />
         )}
       </Modal>
-
     </PageContainer>
   );
 };

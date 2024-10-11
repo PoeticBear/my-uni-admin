@@ -8,6 +8,8 @@ export async function fetchExercises(
   params: API.fetchExercisesParams,
   options?: { [key: string]: any },
 ) {
+  console.log('fetchExercises params:', params);
+  console.log('fetchExercises options:', options);
   return request<any>('/api/exercises', {
     method: 'GET',
     params: {
