@@ -78,16 +78,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       onFinish={handleFinish}
     >
       <ProFormText
-        label="训练器械英文名称"
-        name="name"
-        rules={[
-          {
-            required: true,
-            message: '训练器械英文名称为必填项',
-          },
-        ]}
-      />
-      <ProFormText
         label="训练器械中文名称"
         name="name_cn"
         rules={[
@@ -96,6 +86,16 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             message: '训练器械中文名称为必填项',
           },
         ]}
+      />
+      <ProFormText
+        label="训练器械英文名称"
+        name="name"
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: '训练器械英文名称为必填项',
+        //   },
+        // ]}
       />
       <ProFormUploadButton
         title="器械图片"
@@ -119,12 +119,12 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             setFileList(newFileList);
           },
         }}
-        rules={[
-          {
-            required: true,
-            message: '训练器械图片为必填项',
-          },
-        ]}
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: '训练器械图片为必填项',
+        //   },
+        // ]}
       />
     </ModalForm>
   );

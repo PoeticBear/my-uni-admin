@@ -79,12 +79,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmi
         console.error('文件上传失败：', error);
       }
     } else {
+      console.log("没有上传图片");
       const formValues = {
-        name: values.name,
         name_cn: values.name_cn,
-        parent: values.parent.value,
-        image: "", // 将上传的图片 URL 添加到表单中
+        parent: values.parent?.value,
+        name: values.name,
+        image: "",
       };
+      console.log("提交接口参数",formValues)
       await onSubmit(formValues);
     }
   };
@@ -99,6 +101,16 @@ const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmi
       }}
       onFinish={handleFinish}
     >
+      <ProFormText
+        label="肌群中文名称"
+        name="name_cn"
+        rules={[
+          {
+            required: true,
+            message: '肌群中文名称为必填项',
+          },
+        ]}
+      />
       <ProFormSelect
         label="父级肌群（身体部位）"
         name="parent"
@@ -123,16 +135,6 @@ const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmi
         //     message: '肌群英文名称为必填项',
         //   },
         // ]}
-      />
-      <ProFormText
-        label="肌群中文名称"
-        name="name_cn"
-        rules={[
-          {
-            required: true,
-            message: '肌群中文名称为必填项',
-          },
-        ]}
       />
       <ProFormUploadButton
         title="肌群图片"

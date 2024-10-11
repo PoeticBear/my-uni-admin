@@ -69,16 +69,6 @@ const CreateForm: React.FC<CreateFormProps> = ({
       }}
     >
       <ProFormText
-        label="训练器械英文名称"
-        name="name"
-        // rules={[
-        //   {
-        //     required: true,
-        //     message: '训练器械英文名称为必填项',
-        //   },
-        // ]}
-      />
-      <ProFormText
         label="训练器械中文名称"
         name="name_cn"
         rules={[
@@ -87,6 +77,16 @@ const CreateForm: React.FC<CreateFormProps> = ({
             message: '训练器械中文名称为必填项',
           },
         ]}
+      />
+      <ProFormText
+        label="训练器械英文名称"
+        name="name"
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: '训练器械英文名称为必填项',
+        //   },
+        // ]}
       />
       <ProFormUploadButton
         title="器械图片"

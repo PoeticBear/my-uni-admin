@@ -89,7 +89,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
       console.log('没有特么的修改图片', formValues);
       const updatedValues = {
         ...formValues,
-        parent: formValues.parent.value,
+        parent: formValues.parent?.value,
         image: values.image,
       };
       console.log('没有特么的修改图片 updatedValues', updatedValues);
@@ -114,30 +114,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
       }}
       onFinish={handleFinish}
     >
-      <ProFormSelect
-        label="父级肌群（身体部位）"
-        name="parent"
-        request={getBodyParts}
-        fieldProps={{
-          labelInValue: true, // 确保选择时返回 label 和 value 对象
-        }}
-        rules={[
-          {
-            required: true,
-            message: '父级肌群（身体部位）为必填项',
-          },
-        ]}
-      />
-      <ProFormText
-        label="肌群英文名称"
-        name="name"
-        rules={[
-          {
-            required: true,
-            message: '肌群英文名称为必填项',
-          },
-        ]}
-      />
       <ProFormText
         label="肌群中文名称"
         name="name_cn"
@@ -148,6 +124,31 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
           },
         ]}
       />
+      <ProFormSelect
+        label="父级肌群（身体部位）"
+        name="parent"
+        request={getBodyParts}
+        fieldProps={{
+          labelInValue: true, // 确保选择时返回 label 和 value 对象
+        }}
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: '父级肌群（身体部位）为必填项',
+        //   },
+        // ]}
+      />
+      <ProFormText
+        label="肌群英文名称"
+        name="name"
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: '肌群英文名称为必填项',
+        //   },
+        // ]}
+      />
+
       <ProFormUploadButton
         title="肌群图片"
         label="肌群图片"
