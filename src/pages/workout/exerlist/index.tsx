@@ -349,6 +349,7 @@ const TableList: React.FC = () => {
             style={{ width: '100%', height: 'auto' }} // 视频全屏显示
             controls // 显示控制按钮
             autoPlay // 自动播放
+            loop // 循环播放
           />
         )}
       </Modal>
