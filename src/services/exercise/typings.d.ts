@@ -28,7 +28,7 @@ declare namespace API {
     /** 参考内容 */
     referenceContent?: string;
     /** 常见错误 */
-    commonMistakes?: string;
+    // commonMistakes?: string;
     /** 注意事项 */
     precautions?: string;
     /** 适合人群 */
@@ -95,7 +95,7 @@ declare namespace API {
     /** 参考内容 */
     referenceContent?: string;
     /** 常见错误 */
-    commonMistakes?: string;
+    // commonMistakes?: string;
     /** 注意事项 */
     precautions?: string;
     /** 适合人群 */

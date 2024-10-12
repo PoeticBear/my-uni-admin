@@ -88,10 +88,14 @@ const CreateForm: React.FC<CreateFormProps> = ({
     console.log('新增动作数据', values);
     let formValues = {
       ...values,
-      bodyParts: values.bodyParts.map((item: any) => item.value),
-      primaryMuscles: values.primaryMuscles.map((item: any) => item.value),
-      secondaryMuscles: values.secondaryMuscles.map((item: any) => item.value),
-      equipments: values.equipments.map((item: any) => item.value),
+      bodyParts: values.bodyParts ? values.bodyParts.map((item: any) => item.value) : [],
+      primaryMuscles: values.primaryMuscles
+        ? values.primaryMuscles.map((item: any) => item.value)
+        : [],
+      secondaryMuscles: values.secondaryMuscles
+        ? values.secondaryMuscles.map((item: any) => item.value)
+        : [],
+      equipments: values.equipments ? values.equipments.map((item: any) => item.value) : [],
       image: '',
       videos: [],
     };
@@ -211,7 +215,7 @@ const CreateForm: React.FC<CreateFormProps> = ({
           />
         </Col>
         <Col span={8}>
-          <ProFormTextArea label="常见错误" name="commonMistakes" placeholder="请输入常见错误" />
+          <ProFormTextArea label="训练要点" name="referenceContent" placeholder="请输入训练要点" />
         </Col>
         <Col span={8}>
           <ProFormTextArea label="注意事项" name="precautions" placeholder="请输入注意事项" />

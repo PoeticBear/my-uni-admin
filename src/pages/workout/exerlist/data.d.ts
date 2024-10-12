@@ -8,7 +8,8 @@ export type TableListItem = {
   primaryMuscles:string[];
   secondaryMuscles:string[];
   equipments:string[];
-  commonMistakes:string;
+  referenceContent:string;
+  // commonMistakes:string;
   precautions:string;
   suitableFor:string;
   image: string;

@@ -284,7 +284,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
           />
         </Col>
         <Col span={8}>
-          <ProFormTextArea label="常见错误" name="commonMistakes" placeholder="请输入常见错误" />
+          <ProFormTextArea label="训练要点" name="referenceContent" placeholder="请输入训练要点" />
         </Col>
         <Col span={8}>
           <ProFormTextArea label="注意事项" name="precautions" placeholder="请输入注意事项" />
