@@ -24,9 +24,9 @@ const handleAdd = async (fields: TableListItem) => {
   const hide = message.loading('正在添加');
   try {
     await create({
+      name_cn: fields.name_cn,
       parent: fields.parent,
       name: fields.name,
-      name_cn: fields.name_cn,
       image: fields.image,
     });
     hide();
@@ -103,6 +103,11 @@ const TableList: React.FC = () => {
 
   const columns: ProColumns<TableListItem>[] = [
     {
+      title: '肌群中文名称',
+      dataIndex: 'name_cn',
+      valueType: 'text',
+    },
+    {
       title: '父级肌群（身体部位）',
       dataIndex: 'parent',
       valueType: 'text',
@@ -114,11 +119,6 @@ const TableList: React.FC = () => {
     {
       title: '肌群英文名称',
       dataIndex: 'name',
-      valueType: 'text',
-    },
-    {
-      title: '肌群中文名称',
-      dataIndex: 'name_cn',
       valueType: 'text',
     },
     {

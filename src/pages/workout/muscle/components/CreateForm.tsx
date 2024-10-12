@@ -33,7 +33,14 @@ const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmi
   };
 
   const handleFinish = async (values: any) => {
-    console.log('创建肌群数据入参：', values);
+    console.log('新增肌群数据', values);
+
+    let formValues = {
+      name_cn: values.name_cn,
+      parent: values.parent?.value,
+      name: values.name,
+    };
+
     const uploads = values.upload;
     const uploadItem = uploads ? uploads[0] : null;
     const fileObj = uploadItem ? uploadItem.originFileObj : null;
@@ -46,28 +53,19 @@ const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmi
           // 上传成功，处理返回的 URL
           console.log('文件上传成功，访问 URL：', response.result.fileUrl);
         }
-        const formValues = {
-          name: values.name,
-          name_cn: values.name_cn,
-          parent: values.parent.value,
-          image: response.result.fileUrl, // 将上传的图片 URL 添加到表单中
+        formValues = {
+          ...formValues,
+          image: response.result.fileUrl,
         };
-
-        console.log('提交接口参数', formValues);
-
         await onSubmit(formValues);
       } catch (error) {
         console.error('文件上传失败：', error);
       }
     } else {
-      console.log("没有上传图片");
-      const formValues = {
-        name_cn: values.name_cn,
-        parent: values.parent?.value,
-        name: values.name,
+      formValues = {
+        ...formValues,
         image: "",
       };
-      console.log("提交接口参数",formValues)
       await onSubmit(formValues);
     }
   };

@@ -2,9 +2,9 @@ export type TableListItem = {
   _id: string;
   id: string;
   key: number;
+  name_cn: string;
   parent: string;
   name: string;
-  name_cn: string;
   image: string;
 };
 
@@ -21,9 +21,9 @@ export type TableListData = {
 
 export type TableListParams = {
   key?: number;
+  name_cn?: string;
   parent?: string;
   name?: string;
-  name_cn?: string;
   pageSize?: number;
   currentPage?: number;
   filter?: Record<string, any[]>;

@@ -34,20 +34,18 @@ export async function deleteByIds(
 
 /** 更新肌群数据 PUT /api/muscles/${param0} */
 export async function updateById(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.updateByIdParams,
   body: API.UpdateMuscleDto,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
-  console.log("updateById",params, body);
+  console.log("updateById", params, body);
+  const { _id: param0 } = params;
   return request<any>(`/api/muscles/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
-    data: body,
+    data: body,  // 直接发送 body 数据
     ...(options || {}),
   });
 }

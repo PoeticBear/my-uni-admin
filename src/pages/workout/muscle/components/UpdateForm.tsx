@@ -1,4 +1,3 @@
-import { uploadFile } from '@/services/file/file';
 import { fetchBodyPart } from '@/services/muscle/muscles';
 import {
   ModalForm,
@@ -9,6 +8,7 @@ import {
 import { UploadFile } from 'antd';
 import React, { useEffect, useState } from 'react';
 import type { TableListItem } from '../data';
+import { uploadFile } from '@/services/file/file';
 
 export type UpdateFormProps = {
   onCancel: () => void;
@@ -18,39 +18,37 @@ export type UpdateFormProps = {
 };
 
 export type FormValueType = {
+  name_cn?: string;
   parent?: string;
   name?: string;
-  name_cn?: string;
   image?: string;
 } & Partial<TableListItem>;
-
-// export type UpdateFormValueType = {
-//   parent?: string | null
-//   name?: string;
-//   name_cn?: string;
-//   image?: string;
-// }
 
 const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { onCancel, onSubmit, values } = props;
-  console.log('初始化更新数据弹窗，values是啥', values);
-  // 根据 props.values.image 初始化 fileList
+  console.log('传入弹窗：', values);
+
   useEffect(() => {
     if (values.image) {
+      // 如果 image 是 URL 字符串，构造一个符合要求的 fileList 数组
       setFileList([
         {
-          uid: '-1',
-          name: 'image.png',
-          status: 'done',
-          url: values.image,
+          uid: '-1', // 每个文件必须有唯一的 uid
+          name: 'image.png', // 文件名可以根据需要设定
+          status: 'done', // 表示文件上传已完成
+          url: values.image, // 现有图片的 URL
         },
       ]);
     } else {
       setFileList([]);
     }
-  }, [values.image, props.updateModalVisible]);
+  }, [values, props.updateModalVisible]);
 
+  /**
+   * 获取所有身体部位
+   * @returns
+   */
   const getBodyParts = async () => {
     try {
       const response = await fetchBodyPart();
@@ -64,10 +62,22 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
     } catch (error) {}
   };
 
-  const handleFinish = async (formValues: any) => {
-    console.log('提交更新，formValues是个啥', formValues);
+  const handleFinish = async (values: any) => {
+    console.log('handleFinish:', values);
 
-    const fileObj = formValues.upload ? formValues.upload[0]?.originFileObj : null;
+    let formValues = {
+      name_cn: values.name_cn,
+      parent: values.parent ? values.parent.value : undefined,
+      name: values.name,
+      image: values.thumbnail[0]?.url || '',  // 初始默认值为上传图片的 URL，如果没有上传，设置为空字符串
+    };
+
+    // 检查是否有新的文件上传
+    const thumbnail = values.thumbnail;
+    const uploadItem = thumbnail ? thumbnail[0] : null;
+    const fileObj = uploadItem ? uploadItem.originFileObj : null;
+
+    // 如果有新上传的文件
     if (fileObj) {
       const formData = new FormData();
       formData.append('file', fileObj);
@@ -76,26 +86,21 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
         if (response && response.result && response.result.fileUrl) {
           // 上传成功，处理返回的 URL
           console.log('文件上传成功，访问 URL：', response.result.fileUrl);
+          formValues.image = response.result.fileUrl;  // 更新图片 URL
         }
-        const updatedValues = {
-          ...formValues,
-          image: response.result.fileUrl, // 将上传的图片 URL 添加到表单中
-        };
-        await onSubmit(updatedValues);
       } catch (error) {
         console.error('文件上传失败：', error);
       }
     } else {
-      console.log('没有特么的修改图片', formValues);
-      const updatedValues = {
-        ...formValues,
-        parent: formValues.parent?.value,
-        image: values.image,
-      };
-      console.log('没有特么的修改图片 updatedValues', updatedValues);
-      await onSubmit(updatedValues);
+      // 如果没有新的文件上传并且图片已被删除
+      if (fileList.length === 0) {
+        formValues.image = '';  // 清空图片字段
+      }
     }
+
+    await onSubmit(formValues);
   };
+
 
   return (
     <ModalForm
@@ -106,11 +111,21 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
         onCancel,
       }}
       initialValues={{
-        ...values,
+        name_cn: values.name_cn,
         parent: values?.parent
           ? { value: values.parent._id, label: values.parent.name_cn }
-          : undefined, // 确保是正确的格式
-        image: values.image, // 初始化 image
+          : undefined,
+        name: values.name || '',
+        thumbnail: values.image
+          ? [
+              {
+                uid: '-1', // 必须的唯一 uid
+                name: 'image.png', // 默认图片名称
+                status: 'done', // 状态设置为完成
+                url: values.image, // 当前图片的 URL
+              },
+            ]
+          : [],
       }}
       onFinish={handleFinish}
     >
@@ -131,51 +146,27 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
         fieldProps={{
           labelInValue: true, // 确保选择时返回 label 和 value 对象
         }}
-        // rules={[
-        //   {
-        //     required: true,
-        //     message: '父级肌群（身体部位）为必填项',
-        //   },
-        // ]}
       />
-      <ProFormText
-        label="肌群英文名称"
-        name="name"
-        // rules={[
-        //   {
-        //     required: true,
-        //     message: '肌群英文名称为必填项',
-        //   },
-        // ]}
-      />
+      <ProFormText label="肌群英文名称" name="name" />
 
       <ProFormUploadButton
         title="肌群图片"
         label="肌群图片"
-        name="upload"
+        name="thumbnail"
         max={1}
         fieldProps={{
           name: 'file',
           listType: 'picture-card',
-          defaultFileList: [...fileList],
+          defaultFileList: fileList,
           maxCount: 1,
           beforeUpload: (file) => {
-            setFileList([...fileList, file]);
+            setFileList([file]);
             return false;
           },
-          onRemove: (file) => {
-            const index = fileList.indexOf(file);
-            const newFileList = fileList.slice();
-            newFileList.splice(index, 1);
-            setFileList(newFileList);
+          onRemove: () => {
+            setFileList([]);  // 更新 fileList 状态
           },
         }}
-        // rules={[
-        //   {
-        //     required: true,
-        //     message: '肌群图片为必填项',
-        //   },
-        // ]}
       />
     </ModalForm>
   );
