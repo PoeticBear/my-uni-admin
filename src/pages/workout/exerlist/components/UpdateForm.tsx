@@ -123,7 +123,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
           console.log('文件上传成功，访问 URL：', response.result.fileUrl);
         }
         formValues = {
-          ...values,
+          ...formValues,
           image: response.result.gifUrl,
           videos: [response.result.fileUrl],
         };
