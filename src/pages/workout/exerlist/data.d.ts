@@ -8,11 +8,11 @@ export type TableListItem = {
   primaryMuscles:string[];
   secondaryMuscles:string[];
   equipments:string[];
-  image: string;
-  videos: string[];
   commonMistakes:string;
   precautions:string;
   suitableFor:string;
+  image: string;
+  videos: string[];
 };
 
 export type TableListPagination = {

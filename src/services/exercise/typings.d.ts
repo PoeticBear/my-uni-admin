@@ -73,6 +73,15 @@ declare namespace API {
     name?: string;
     /** 动作中文名 */
     name_cn?: string;
+
+    bodyParts: string[];
+
+    primaryMuscles: string[];
+
+    secondaryMuscles: string[];
+
+    equipments: string[];
+
     /** 动作图片 */
     image?: string;
     /** 动作视频 */

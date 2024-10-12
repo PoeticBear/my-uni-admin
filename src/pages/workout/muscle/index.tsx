@@ -7,7 +7,7 @@ import {
   ProDescriptions,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, Drawer, Image, message } from 'antd';
+import { Button, Drawer, Image, message, Modal } from 'antd';
 import React, { useRef, useState } from 'react';
 import CreateForm from './components/CreateForm';
 // import type { UpdateFormValueType } from './components/UpdateForm';
@@ -127,7 +127,7 @@ const TableList: React.FC = () => {
       valueType: 'text',
       search: false,
       render: (text) =>
-        (text?.toString().startsWith('http') || text?.toString().startsWith('https')) ? (
+        text?.toString().startsWith('http') || text?.toString().startsWith('https') ? (
           <Image width={20} src={text?.toString()} />
         ) : (
           <span style={{ color: 'gray' }}>未上传图片</span> // 图片为空时显示提示文本
@@ -150,8 +150,16 @@ const TableList: React.FC = () => {
         <a
           key="delete"
           onClick={async () => {
-            await handleRemove([record]);
-            actionRef.current?.reloadAndRest?.();
+            Modal.confirm({
+              title: '确认删除',
+              content: '确定要删除这个训练动作吗？此操作不可恢复。',
+              okText: '确认',
+              cancelText: '取消',
+              onOk: async () => {
+                await handleRemove([record]); // 删除操作
+                actionRef.current?.reloadAndRest?.(); // 重新加载数据
+              },
+            });
           }}
         >
           删除
@@ -167,9 +175,9 @@ const TableList: React.FC = () => {
         actionRef={actionRef}
         rowKey="_id"
         pagination={{
-          pageSize: 100,  // 每页显示 100 行
-          showSizeChanger: true,  // 允许用户修改每页显示数量
-          pageSizeOptions: ['10', '20', '50', '100', '200'],  // 可选的每页显示数量
+          pageSize: 100, // 每页显示 100 行
+          showSizeChanger: true, // 允许用户修改每页显示数量
+          pageSizeOptions: ['10', '20', '50', '100', '200'], // 可选的每页显示数量
         }}
         search={{
           labelWidth: 120,

@@ -7,7 +7,7 @@ import {
   ProDescriptions,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, Drawer, message } from 'antd';
+import { Button, Drawer, message, Modal } from 'antd';
 import React, { useRef, useState } from 'react';
 import CreateForm from './components/CreateForm';
 import type { FormValueType } from './components/UpdateForm';
@@ -113,7 +113,7 @@ const TableList: React.FC = () => {
       valueType: 'text',
       search: false,
       render: (text) =>
-        (text?.toString().startsWith('http') || text?.toString().startsWith('https')) ? (
+        text?.toString().startsWith('http') || text?.toString().startsWith('https') ? (
           <img
             src={text as string} // 使用图片地址
             alt="器械图片"
@@ -140,8 +140,16 @@ const TableList: React.FC = () => {
         <a
           key="delete"
           onClick={async () => {
-            await handleRemove([record]);
-            actionRef.current?.reloadAndRest?.();
+            Modal.confirm({
+              title: '确认删除',
+              content: '确定要删除这个训练动作吗？此操作不可恢复。',
+              okText: '确认',
+              cancelText: '取消',
+              onOk: async () => {
+                await handleRemove([record]); // 删除操作
+                actionRef.current?.reloadAndRest?.(); // 重新加载数据
+              },
+            });
           }}
         >
           删除

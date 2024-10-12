@@ -10,7 +10,7 @@ import {
 import { Button, Drawer, Image, message, Modal } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import CreateForm from './components/CreateForm';
-import type { FormValueType } from './components/UpdateForm';
+// import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
 import type { TableListItem, TableListPagination } from './data';
 
@@ -26,10 +26,10 @@ const handleAdd = async (fields: TableListItem) => {
       name: fields.name,
       name_cn: fields.name_cn,
       serial: fields.serial,
-      bodyParts:fields.bodyParts,
-      primaryMuscles:fields.primaryMuscles,
-      secondaryMuscles:fields.secondaryMuscles,
-      equipments:fields.equipments,
+      bodyParts: fields.bodyParts,
+      primaryMuscles: fields.primaryMuscles,
+      secondaryMuscles: fields.secondaryMuscles,
+      equipments: fields.equipments,
       commonMistakes: fields.commonMistakes,
       precautions: fields.precautions,
       suitableFor: fields.suitableFor,
@@ -51,7 +51,7 @@ const handleAdd = async (fields: TableListItem) => {
  *
  * @param fields
  */
-const handleUpdate = async (fields: FormValueType, currentRow?: TableListItem) => {
+const handleUpdate = async (fields: any, currentRow?: TableListItem) => {
   const hide = message.loading('正在更新');
   try {
     await updateById(
@@ -59,6 +59,14 @@ const handleUpdate = async (fields: FormValueType, currentRow?: TableListItem) =
       {
         name: fields.name,
         name_cn: fields.name_cn,
+        serial: fields.serial,
+        bodyParts: fields.bodyParts,
+        primaryMuscles: fields.primaryMuscles,
+        secondaryMuscles: fields.secondaryMuscles,
+        equipments: fields.equipments,
+        commonMistakes: fields.commonMistakes,
+        precautions: fields.precautions,
+        suitableFor: fields.suitableFor,
         image: fields.image,
         videos: fields.videos,
       },
@@ -163,6 +171,28 @@ const TableList: React.FC = () => {
       },
     },
     {
+      title: '主要肌肉群',
+      dataIndex: 'primaryMuscles',
+      valueType: 'text',
+      search: false,
+      render: (primaryMuscles: Array<{ name_cn: string }> = []) => {
+        // 使用 map 提取每个对象的 name_cn 字段并通过逗号拼接
+        const names = primaryMuscles.map((part) => part.name_cn).join(', ');
+        return names || '[未设置]';
+      },
+    },
+    {
+      title: '次要肌肉群',
+      dataIndex: 'secondaryMuscles',
+      valueType: 'text',
+      search: false,
+      render: (secondaryMuscles: Array<{ name_cn: string }> = []) => {
+        // 使用 map 提取每个对象的 name_cn 字段并通过逗号拼接
+        const names = secondaryMuscles.map((part) => part.name_cn).join(', ');
+        return names || '[未设置]';
+      },
+    },
+    {
       title: '训练器械',
       dataIndex: 'equipments',
       valueType: 'text',
@@ -233,6 +263,7 @@ const TableList: React.FC = () => {
         <a
           key="edit"
           onClick={() => {
+            console.log('编辑动作', record);
             setCurrentRow(record);
             handleUpdateModalVisible(true);
           }}
@@ -242,8 +273,16 @@ const TableList: React.FC = () => {
         <a
           key="delete"
           onClick={async () => {
-            await handleRemove([record]);
-            actionRef.current?.reloadAndRest?.();
+            Modal.confirm({
+              title: '确认删除',
+              content: '确定要删除这个训练动作吗？此操作不可恢复。',
+              okText: '确认',
+              cancelText: '取消',
+              onOk: async () => {
+                await handleRemove([record]); // 删除操作
+                actionRef.current?.reloadAndRest?.(); // 重新加载数据
+              },
+            });
           }}
         >
           删除
@@ -277,7 +316,7 @@ const TableList: React.FC = () => {
           const response = await fetchExercises({
             name: params.name || '', // 过滤条件：器械英文名称
             name_cn: params.name_cn || '', // 过滤条件：器械中文名称
-            serial : params.serial || '',
+            serial: params.serial || '',
             current: params.current || 1, // 分页参数：当前页码
             pageSize: params.pageSize || 50, // 分页参数：每页条数
           });
@@ -296,7 +335,7 @@ const TableList: React.FC = () => {
           },
         }}
         pagination={{
-          pageSizeOptions: ['10', '20', '50', '100','1000'], // 可选的每页显示数量
+          pageSizeOptions: ['10', '20', '50', '100', '1000'], // 可选的每页显示数量
           defaultPageSize: 50, // 默认的每页显示数量
           showSizeChanger: true, // 是否可以改变每页显示的数量
           showQuickJumper: true, // 是否可以快速跳页
