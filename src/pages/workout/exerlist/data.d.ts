@@ -3,8 +3,16 @@ export type TableListItem = {
   key: number;
   name: string;
   name_cn: string;
+  serial: string;
+  bodyParts:string[];
+  primaryMuscles:string[];
+  secondaryMuscles:string[];
+  equipments:string[];
   image: string;
   videos: string[];
+  commonMistakes:string;
+  precautions:string;
+  suitableFor:string;
 };
 
 export type TableListPagination = {

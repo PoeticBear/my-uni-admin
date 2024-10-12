@@ -1,4 +1,6 @@
+import { fetchEquipments } from '@/services/equipment/equipments';
 import { uploadFile } from '@/services/file/file';
+import { fetchBodyPart, fetchMuscles } from '@/services/muscle/muscles';
 import {
   ModalForm,
   ProFormSelect,
@@ -25,15 +27,78 @@ const CreateForm: React.FC<CreateFormProps> = ({
   onCancel,
   onSubmit,
   initialValues,
-  bodyPartsOptions,
-  primaryMusclesOptions,
-  secondaryMusclesOptions,
-  equipmentsOptions,
 }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
+  const getBodyParts = async () => {
+    try {
+      const response = await fetchBodyPart();
+      if (response && response.result) {
+        const options = response.result.map((item: any) => ({
+          label: item.name_cn, // 显示中文名称
+          value: item._id, // 对应的数据_id
+        }));
+        return options;
+      }
+    } catch (error) {}
+  };
+
+  const getPrimaryMuscles = async () => {
+    try {
+      const response = await fetchMuscles({
+        name: '', // 过滤条件：器械英文名称
+        name_cn: '', // 过滤条件：器械中文名称
+        current: 1, // 分页参数：当前页码
+        pageSize: 100, // 分页参数：每页条数
+      });
+      console.log('getPrimaryMuscles', response);
+      if (response && response.result) {
+        const primaryMuscles = response.result.muscles.filter((item: any) => item.parent !== null);
+
+        const options = primaryMuscles.map((item: any) => ({
+          label: item.name_cn, // 显示中文名称
+          value: item._id, // 对应的数据_id
+        }));
+        return options;
+      }
+    } catch (error) {}
+  };
+
+  const getEquipments = async () => {
+    try {
+      const response = await fetchEquipments({
+        name: '', // 过滤条件：器械英文名称
+        name_cn: '', // 过滤条件：器械中文名称
+        current: 1, // 分页参数：当前页码
+        pageSize: 100, // 分页参数：每页条数
+      });
+      console.log('getEquipments', response);
+      if (response && response.result) {
+        const equipments = response.result.equipments.filter((item: any) => item.parent !== null);
+        const options = equipments.map((item: any) => ({
+          label: item.name_cn, // 显示中文名称
+          value: item._id, // 对应的数据_id
+        }));
+        return options;
+      }
+    } catch (error) {}
+  };
+
   const handleFinish = async (values: any) => {
-    console.log('values', values);
+    console.log('新增动作数据', values);
+    let formValues = {
+      ...values,
+      bodyParts: values.bodyParts.map((item: any) => item.value),
+      primaryMuscles: values.primaryMuscles.map((item: any) => item.value),
+      secondaryMuscles: values.secondaryMuscles.map((item: any) => item.value),
+      equipments: values.equipments.map((item: any) => item.value),
+      image: '',
+      videos: [],
+    };
+
+    console.log('新增动作数据formValues', formValues);
+
+    // 处理上传文件逻辑
     const uploads = values.upload;
     const uploadItem = uploads ? uploads[0] : null;
     const fileObj = uploadItem ? uploadItem.originFileObj : null;
@@ -43,20 +108,19 @@ const CreateForm: React.FC<CreateFormProps> = ({
       try {
         const response = await uploadFile(formData);
         if (response && response.result && response.result.fileUrl) {
-          // 上传成功，处理返回的 URL
           console.log('文件上传成功，访问 URL：', response.result.fileUrl);
         }
-        const formValues = {
+        formValues = {
           ...values,
           image: response.result.gifUrl,
-          videos: [response.result.fileUrl], // 上传成功后将新视频的 URL 存入表单
+          videos: [response.result.fileUrl],
         };
         await onSubmit(formValues);
       } catch (error) {
         console.error('文件上传失败：', error);
       }
     } else {
-      await onSubmit(values);
+      await onSubmit(formValues);
     }
   };
 
@@ -99,15 +163,23 @@ const CreateForm: React.FC<CreateFormProps> = ({
           <ProFormSelect
             label="身体部位"
             name="bodyParts"
-            options={bodyPartsOptions}
+            request={getBodyParts}
             placeholder="请选择身体部位"
+            fieldProps={{
+              labelInValue: true,
+              mode: 'multiple',
+            }}
           />
         </Col>
         <Col span={8}>
           <ProFormSelect
             label="主要肌肉群"
             name="primaryMuscles"
-            options={primaryMusclesOptions}
+            request={getPrimaryMuscles}
+            fieldProps={{
+              labelInValue: true,
+              mode: 'multiple',
+            }}
             placeholder="请选择主要肌肉群"
           />
         </Col>
@@ -115,7 +187,11 @@ const CreateForm: React.FC<CreateFormProps> = ({
           <ProFormSelect
             label="次要肌肉群"
             name="secondaryMuscles"
-            options={secondaryMusclesOptions}
+            request={getPrimaryMuscles}
+            fieldProps={{
+              labelInValue: true,
+              mode: 'multiple',
+            }}
             placeholder="请选择次要肌肉群"
           />
         </Col>
@@ -126,7 +202,11 @@ const CreateForm: React.FC<CreateFormProps> = ({
           <ProFormSelect
             label="训练器械"
             name="equipments"
-            options={equipmentsOptions}
+            request={getEquipments}
+            fieldProps={{
+              labelInValue: true,
+              mode: 'multiple',
+            }}
             placeholder="请选择训练器械"
           />
         </Col>

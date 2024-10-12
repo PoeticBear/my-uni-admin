@@ -19,25 +19,6 @@ type CreateFormProps = {
 const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmit }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  // // 获取身体部位数据并设置到下拉框 options 中
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetchBodyPart();
-  //       if (response && response.result) {
-  //         const options = response.result.map((item: any) => ({
-  //           label: item.name_cn, // 显示中文名称
-  //           value: item._id// 对应的数据_id
-  //         }));
-  //         setBodyPartOptions(options);
-  //       }
-  //     } catch (error) {
-  //       console.error('获取身体部位数据失败：', error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-
   const getBodyParts = async () => {
     try {
       const response = await fetchBodyPart();

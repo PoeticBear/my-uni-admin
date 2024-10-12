@@ -25,6 +25,14 @@ const handleAdd = async (fields: TableListItem) => {
     await create({
       name: fields.name,
       name_cn: fields.name_cn,
+      serial: fields.serial,
+      bodyParts:fields.bodyParts,
+      primaryMuscles:fields.primaryMuscles,
+      secondaryMuscles:fields.secondaryMuscles,
+      equipments:fields.equipments,
+      commonMistakes: fields.commonMistakes,
+      precautions: fields.precautions,
+      suitableFor: fields.suitableFor,
       image: fields.image,
       videos: fields.videos,
     });

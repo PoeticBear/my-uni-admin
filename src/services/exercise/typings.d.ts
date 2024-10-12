@@ -1,11 +1,20 @@
 declare namespace API {
   type CreateExerciseDto = {
-    /** 序号 */
-    serial?: string;
     /** 动作英文名 */
     name?: string;
     /** 动作中文名 */
     name_cn: string;
+    /** 动作编号 */
+    serial: string;
+
+    bodyParts: string[];
+
+    primaryMuscles: string[];
+
+    secondaryMuscles: string[];
+
+    equipments: string[];
+
     /** 动作图片 */
     image: string;
     /** 动作视频 */
