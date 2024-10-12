@@ -33,6 +33,15 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
   const [primaryMuscles, setPrimaryMuscles] = useState<{ label: string; value: string }[]>([]);
   const [secondaryMuscles, setSecondaryMuscles] = useState<{ label: string; value: string }[]>([]);
   const [equipments, setEquipments] = useState<{ label: string; value: string }[]>([]);
+
+  useEffect(() => {
+    const videoElement = document.getElementById('video-player');
+    if (videoElement) {
+      videoElement.playbackRate = 1.5; // 设置默认播放速率为 1.5 倍
+    }
+  }, [values]);
+
+
   useEffect(() => {
     // 如果已有视频，则初始化 fileList
     if (values.videos && values.videos.length > 0) {
@@ -321,6 +330,8 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
                 src={fileList[0].url}
                 controls
                 style={{ width: '100%', maxHeight: '300px', objectFit: 'cover' }}
+                autoPlay
+                loop
               />
             </div>
           </Col>
