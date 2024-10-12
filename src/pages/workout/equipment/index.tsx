@@ -98,31 +98,31 @@ const TableList: React.FC = () => {
 
   const columns: ProColumns<TableListItem>[] = [
     {
-      title: '训练器械英文名称',
-      dataIndex: 'name',
-      valueType: 'text',
-    },
-    {
       title: '训练器械中文名称',
       dataIndex: 'name_cn',
       valueType: 'text',
     },
     {
-      title: '图片',
-      dataIndex: 'image',
+      title: '训练器械英文名称',
+      dataIndex: 'name',
       valueType: 'text',
-      search: false,
-      render: (text) =>
-        text?.toString().startsWith('http') || text?.toString().startsWith('https') ? (
-          <img
-            src={text as string} // 使用图片地址
-            alt="器械图片"
-            style={{ width: 20, height: 20, objectFit: 'cover' }} // 设置图片样式
-          />
-        ) : (
-          <span style={{ color: 'gray' }}>未上传图片</span> // 图片为空时显示提示文本
-        ),
     },
+    // {
+    //   title: '图片',
+    //   dataIndex: 'image',
+    //   valueType: 'text',
+    //   search: false,
+    //   render: (text) =>
+    //     text?.toString().startsWith('http') || text?.toString().startsWith('https') ? (
+    //       <img
+    //         src={text as string} // 使用图片地址
+    //         alt="器械图片"
+    //         style={{ width: 20, height: 20, objectFit: 'cover' }} // 设置图片样式
+    //       />
+    //     ) : (
+    //       <span style={{ color: 'gray' }}>未上传图片</span> // 图片为空时显示提示文本
+    //     ),
+    // },
     {
       title: '操作',
       dataIndex: 'option',

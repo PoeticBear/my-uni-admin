@@ -20,29 +20,30 @@ const CreateForm: React.FC<CreateFormProps> = ({
 
   const handleFinish = async (values: any) => {
     console.log('values', values);
-    const uploads = values.upload;
-    const uploadItem = uploads ? uploads[0] : null;
-    const fileObj = uploadItem ? uploadItem.originFileObj : null;
-    if (fileObj) {
-      const formData = new FormData();
-      formData.append('file', fileObj);
-      try {
-        const response = await uploadFile(formData);
-        if (response && response.result && response.result.fileUrl) {
-          // 上传成功，处理返回的 URL
-          console.log('文件上传成功，访问 URL：', response.result.fileUrl);
-        }
-        const formValues = {
-          ...values,
-          image: response.result.fileUrl, // 将上传的图片 URL 添加到表单中
-        };
-        await onSubmit(formValues);
-      } catch (error) {
-        console.error('文件上传失败：', error);
-      }
-    } else {
-      await onSubmit(values);
-    }
+    await onSubmit(values);
+    // const uploads = values.upload;
+    // const uploadItem = uploads ? uploads[0] : null;
+    // const fileObj = uploadItem ? uploadItem.originFileObj : null;
+    // if (fileObj) {
+    //   const formData = new FormData();
+    //   formData.append('file', fileObj);
+    //   try {
+    //     const response = await uploadFile(formData);
+    //     if (response && response.result && response.result.fileUrl) {
+    //       // 上传成功，处理返回的 URL
+    //       console.log('文件上传成功，访问 URL：', response.result.fileUrl);
+    //     }
+    //     const formValues = {
+    //       ...values,
+    //       image: response.result.fileUrl, // 将上传的图片 URL 添加到表单中
+    //     };
+    //     await onSubmit(formValues);
+    //   } catch (error) {
+    //     console.error('文件上传失败：', error);
+    //   }
+    // } else {
+    //   await onSubmit(values);
+    // }
   };
 
   return (
@@ -81,14 +82,8 @@ const CreateForm: React.FC<CreateFormProps> = ({
       <ProFormText
         label="训练器械英文名称"
         name="name"
-        // rules={[
-        //   {
-        //     required: true,
-        //     message: '训练器械英文名称为必填项',
-        //   },
-        // ]}
       />
-      <ProFormUploadButton
+      {/* <ProFormUploadButton
         title="器械图片"
         label="器械图片"
         max={1}
@@ -109,13 +104,7 @@ const CreateForm: React.FC<CreateFormProps> = ({
             setFileList(newFileList);
           },
         }}
-        // rules={[
-        //   {
-        //     required: true,
-        //     message: '训练器械图片为必填项',
-        //   },
-        // ]}
-      />
+      /> */}
     </ModalForm>
   );
 };

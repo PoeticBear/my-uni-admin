@@ -42,25 +42,26 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   }, [values.image, props.updateModalVisible]);
 
   const handleFinish = async (values: any) => {
-    const fileObj = values.upload[0].originFileObj;
-    if (fileObj) {
-      const formData = new FormData();
-      formData.append('file', fileObj);
-      try {
-        const response = await uploadFile(formData);
-        if (response && response.result && response.result.fileUrl) {
-          // 上传成功，处理返回的 URL
-          console.log('文件上传成功，访问 URL：', response.result.fileUrl);
-        }
-        const formValues = {
-          ...values,
-          image: response.result.fileUrl, // 将上传的图片 URL 添加到表单中
-        };
-        await onSubmit(formValues);
-      } catch (error) {
-        console.error('文件上传失败：', error);
-      }
-    }
+    await onSubmit(values);
+    // const fileObj = values.upload[0].originFileObj;
+    // if (fileObj) {
+    //   const formData = new FormData();
+    //   formData.append('file', fileObj);
+    //   try {
+    //     const response = await uploadFile(formData);
+    //     if (response && response.result && response.result.fileUrl) {
+    //       // 上传成功，处理返回的 URL
+    //       console.log('文件上传成功，访问 URL：', response.result.fileUrl);
+    //     }
+    //     const formValues = {
+    //       ...values,
+    //       image: response.result.fileUrl, // 将上传的图片 URL 添加到表单中
+    //     };
+    //     await onSubmit(formValues);
+    //   } catch (error) {
+    //     console.error('文件上传失败：', error);
+    //   }
+    // }
   };
 
   return (
@@ -90,14 +91,8 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       <ProFormText
         label="训练器械英文名称"
         name="name"
-        // rules={[
-        //   {
-        //     required: true,
-        //     message: '训练器械英文名称为必填项',
-        //   },
-        // ]}
       />
-      <ProFormUploadButton
+      {/* <ProFormUploadButton
         title="器械图片"
         label="器械图片"
         name="upload"
@@ -119,13 +114,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             setFileList(newFileList);
           },
         }}
-        // rules={[
-        //   {
-        //     required: true,
-        //     message: '训练器械图片为必填项',
-        //   },
-        // ]}
-      />
+      /> */}
     </ModalForm>
   );
 };
