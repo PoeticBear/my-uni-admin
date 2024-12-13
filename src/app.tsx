@@ -23,7 +23,7 @@ export async function getInitialState(): Promise<{
   // 定义fetchUserInfo
   const fetchUserInfo = async () => {
     try {
-      const response = await getUser({ phone: '18012345678' });
+      const response = await getUser({ phone: '13510692662' });
       return response.result;
     } catch (error) {
       history.push(loginPath);
@@ -73,13 +73,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
-
-      console.log('currentUser', initialState?.currentUser);
-      console.log('location.pathname', location.pathname);
-
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         console.log('没有登录');
-
         history.push(loginPath);
       }
     },
