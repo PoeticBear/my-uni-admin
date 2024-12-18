@@ -168,6 +168,8 @@ const TableList: React.FC = () => {
       search: false,
       render: (bodyParts: Array<{ name_cn: string }> = []) => {
         // 使用 map 提取每个对象的 name_cn 字段并通过逗号拼接
+
+        console.log("bodyParts",bodyParts);
         const names = bodyParts.map((part) => part.name_cn).join(', ');
         return names || '未知部位';
       },
@@ -322,6 +324,8 @@ const TableList: React.FC = () => {
             current: params.current || 1, // 分页参数：当前页码
             pageSize: params.pageSize || 50, // 分页参数：每页条数
           });
+
+          console.log("动作列表",response);
 
           // 返回的数据结构必须符合 ProTable 的要求
           return {

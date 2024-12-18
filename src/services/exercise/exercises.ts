@@ -10,7 +10,7 @@ export async function fetchExercises(
 ) {
   console.log('fetchExercises params:', params);
   console.log('fetchExercises options:', options);
-  return request<any>('/api/exercises', {
+  return request<any>('/api/exercises/admin', {
     method: 'GET',
     params: {
       ...params,
