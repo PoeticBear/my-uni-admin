@@ -22,6 +22,7 @@ import { createStyles } from 'antd-style';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
 import Settings from '../../../../config/defaultSettings';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = createStyles(({ token }) => {
   return {
@@ -102,6 +103,7 @@ const Login: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { styles } = useStyles();
   const intl = useIntl();
+  const navigate = useNavigate();
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
@@ -115,37 +117,8 @@ const Login: React.FC = () => {
     }
   };
 
-  // const handleSubmit = async (values: API.LoginParams) => {
-  //   try {
-  //     // 登录
-  //     const msg = await login({ ...values, type });
-  //     if (msg.status === 'ok') {
-  //       const defaultLoginSuccessMessage = intl.formatMessage({
-  //         id: 'pages.login.success',
-  //         defaultMessage: '登录成功！',
-  //       });
-  //       message.success(defaultLoginSuccessMessage);
-  //       await fetchUserInfo();
-  //       const urlParams = new URL(window.location.href).searchParams;
-  //       window.location.href = urlParams.get('redirect') || '/';
-  //       return;
-  //     }
-  //     console.log(msg);
-  //     // 如果失败去设置用户错误信息
-  //     setUserLoginState(msg);
-  //   } catch (error) {
-  //     const defaultLoginFailureMessage = intl.formatMessage({
-  //       id: 'pages.login.failure',
-  //       defaultMessage: '登录失败，请重试！',
-  //     });
-  //     console.log(error);
-  //     message.error(defaultLoginFailureMessage);
-  //   }
-  // };
-
   const handleSubmit = async (values: API.LoginParams) => {
     try {
-      console.log('handleSubmit', values);
       const { phone, password } = values;
       const response = await login({
         data: {
@@ -153,16 +126,14 @@ const Login: React.FC = () => {
           password,
         },
       });
-      console.log('response', response);
-      if (response.statusCode === 200) {
+      if (response.code === 200) {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
-        window.location.href = urlParams.get('redirect') || '/';
+        window.location.href = '/dashboard/analysis';
         return;
       }
       setUserLoginState(response);
@@ -257,10 +228,7 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <UserOutlined />,
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.phone.placeholder',
-                  defaultMessage: '手机号码: 18012345678',
-                })}
+
                 rules={[
                   {
                     required: true,
@@ -279,10 +247,7 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <LockOutlined />,
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.password.placeholder',
-                  defaultMessage: '密码: ant.design',
-                })}
+
                 rules={[
                   {
                     required: true,
