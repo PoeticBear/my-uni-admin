@@ -329,8 +329,8 @@ const TableList: React.FC = () => {
 
           // 返回的数据结构必须符合 ProTable 的要求
           return {
-            data: response.result.exercises, // API 返回的实际数据
-            total: response.result.total, // API 返回的总条目数
+            data: response.data.exercises, // API 返回的实际数据
+            total: response.data.total, // API 返回的总条目数
             success: true, // 请求是否成功
           };
         }}

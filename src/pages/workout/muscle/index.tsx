@@ -201,10 +201,11 @@ const TableList: React.FC = () => {
             current: params.current || 1, // 分页参数：当前页码
             pageSize: 100, // 分页参数：每页条数
           });
+          console.log('肌肉列表', response);
 
           // 返回的数据结构必须符合 ProTable 的要求
           return {
-            data: response.result.muscles, // API 返回的实际数据
+            data: response.data.muscles, // API 返回的实际数据
             total: response.total, // API 返回的总条目数
             success: true, // 请求是否成功
           };

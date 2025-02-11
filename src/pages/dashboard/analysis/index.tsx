@@ -33,9 +33,9 @@ const Analysis: FC<AnalysisProps> = () => {
       const res = await countImagesRatio();
       console.log("已上传的图片占比",res);
       const result = res.result;
-      setTotalExercises(result.totalExercises);
-      setExercisesWithImages(result.exercisesWithImages);
-      setRatio(result.ratio.toFixed(2) * 100);
+      // setTotalExercises(result.totalExercises);
+      // setExercisesWithImages(result.exercisesWithImages);
+      // setRatio(result.ratio.toFixed(2) * 100);
     }
 
     fetchImagesRatio();

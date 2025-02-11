@@ -77,16 +77,18 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
     const uploadItem = thumbnail ? thumbnail[0] : null;
     const fileObj = uploadItem ? uploadItem.originFileObj : null;
 
+    console.log('fileObj', fileObj);
     // 如果有新上传的文件
     if (fileObj) {
       const formData = new FormData();
       formData.append('file', fileObj);
       try {
         const response = await uploadFile(formData);
-        if (response && response.result && response.result.fileUrl) {
+        console.log('上传文件响应', response);
+        if (response && response.data && response.data.fileUrl) {
           // 上传成功，处理返回的 URL
-          console.log('文件上传成功，访问 URL：', response.result.fileUrl);
-          formValues.image = response.result.fileUrl;  // 更新图片 URL
+          console.log('文件上传成功，访问 URL：', response.data.fileUrl);
+          formValues.image = response.data.fileUrl;  // 更新图片 URL
         }
       } catch (error) {
         console.error('文件上传失败：', error);
