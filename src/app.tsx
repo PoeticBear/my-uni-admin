@@ -144,7 +144,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
  */
 export const request: RequestConfig = {
   // baseURL: 'https://proapi.azurewebsites.net',
-  // baseURL: 'http://localhost:3000',
-  baseURL:'https://rwrpqnqilicp.sealosbja.site',
+  baseURL: 'http://localhost:3000',
+  // baseURL:'https://rwrpqnqilicp.sealosbja.site',
   ...errorConfig,
 };

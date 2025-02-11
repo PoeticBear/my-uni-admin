@@ -119,13 +119,13 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
       formData.append('file', fileObj);
       try {
         const response = await uploadFile(formData);
-        if (response && response.result && response.result.fileUrl) {
-          console.log('文件上传成功，访问 URL：', response.result.fileUrl);
+        if (response && response.data && response.data.fileUrl) {
+          console.log('文件上传成功，访问 URL：', response.data.fileUrl);
         }
         formValues = {
           ...formValues,
-          image: response.result.gifUrl,
-          videos: [response.result.fileUrl],
+          image: response.data.gifUrl,
+          videos: [response.data.fileUrl],
         };
         await onSubmit(formValues);
       } catch (error) {
@@ -139,8 +139,8 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
   const getBodyParts = async () => {
     try {
       const response = await fetchBodyPart();
-      if (response && response.result) {
-        const options = response.result.map((item: any) => ({
+      if (response && response) {
+        const options = response.data.map((item: any) => ({
           label: item.name_cn, // 显示中文名称
           value: item._id, // 对应的数据_id
         }));
@@ -158,8 +158,8 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
         pageSize: 100, // 分页参数：每页条数
       });
       console.log('getPrimaryMuscles', response);
-      if (response && response.result) {
-        const primaryMuscles = response.result.muscles.filter((item: any) => item.parent !== null);
+      if (response && response.data) {
+        const primaryMuscles = response.data.muscles.filter((item: any) => item.parent !== null);
         const options = primaryMuscles.map((item: any) => ({
           label: item.name_cn, // 显示中文名称
           value: item._id, // 对应的数据_id
@@ -178,8 +178,8 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
         pageSize: 100, // 分页参数：每页条数
       });
       console.log('getEquipments', response);
-      if (response && response.result) {
-        const equipments = response.result.equipments.filter((item: any) => item.parent !== null);
+      if (response && response.data) {
+        const equipments = response.data.equipments.filter((item: any) => item.parent !== null);
         const options = equipments.map((item: any) => ({
           label: item.name_cn, // 显示中文名称
           value: item._id, // 对应的数据_id
