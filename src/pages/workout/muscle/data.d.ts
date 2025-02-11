@@ -6,6 +6,8 @@ export type TableListItem = {
   parent: string;
   name: string;
   image: string;
+  image_front: string;
+  image_back: string;
 };
 
 export type TableListPagination = {

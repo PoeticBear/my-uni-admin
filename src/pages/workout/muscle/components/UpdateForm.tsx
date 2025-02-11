@@ -22,27 +22,29 @@ export type FormValueType = {
   parent?: string;
   name?: string;
   image?: string;
+  image_front?: string;
+  image_back?: string;
 } & Partial<TableListItem>;
 
 const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [frontFileList, setFrontFileList] = useState<UploadFile[]>([]);
+  const [backFileList, setBackFileList] = useState<UploadFile[]>([]);
   const { onCancel, onSubmit, values } = props;
   console.log('传入弹窗：', values);
 
   useEffect(() => {
-    if (values.image) {
-      // 如果 image 是 URL 字符串，构造一个符合要求的 fileList 数组
-      setFileList([
-        {
-          uid: '-1', // 每个文件必须有唯一的 uid
-          name: 'image.png', // 文件名可以根据需要设定
-          status: 'done', // 表示文件上传已完成
-          url: values.image, // 现有图片的 URL
-        },
-      ]);
-    } else {
-      setFileList([]);
-    }
+    // 初始化所有图片列表
+    const initFileList = (url: string) => url ? [{
+      uid: '-1',
+      name: 'image.png',
+      status: 'done',
+      url: url,
+    }] : [];
+
+    setFileList(initFileList(values.image));
+    setFrontFileList(initFileList(values.image_front));
+    setBackFileList(initFileList(values.image_back));
   }, [values, props.updateModalVisible]);
 
   /**
@@ -69,34 +71,35 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
       name_cn: values.name_cn,
       parent: values.parent ? values.parent.value : undefined,
       name: values.name,
-      image: values.thumbnail[0]?.url || '',  // 初始默认值为上传图片的 URL，如果没有上传，设置为空字符串
+      image: values.thumbnail?.[0]?.url || '',
+      image_front: values.thumbnail_front?.[0]?.url || '',
+      image_back: values.thumbnail_back?.[0]?.url || '',
     };
 
-    // 检查是否有新的文件上传
-    const thumbnail = values.thumbnail;
-    const uploadItem = thumbnail ? thumbnail[0] : null;
-    const fileObj = uploadItem ? uploadItem.originFileObj : null;
+    // 处理所有图片上传
+    const uploadFields = ['thumbnail', 'thumbnail_front', 'thumbnail_back'];
+    const imageFields = ['image', 'image_front', 'image_back'];
+    const fileLists = [fileList, frontFileList, backFileList];
 
-    console.log('fileObj', fileObj);
-    // 如果有新上传的文件
-    if (fileObj) {
-      const formData = new FormData();
-      formData.append('file', fileObj);
-      try {
-        const response = await uploadFile(formData);
-        console.log('上传文件响应', response);
-        if (response && response.data && response.data.fileUrl) {
-          // 上传成功，处理返回的 URL
-          console.log('文件上传成功，访问 URL：', response.data.fileUrl);
-          formValues.image = response.data.fileUrl;  // 更新图片 URL
+    for (let i = 0; i < uploadFields.length; i++) {
+      const thumbnail = values[uploadFields[i]];
+      const uploadItem = thumbnail ? thumbnail[0] : null;
+      const fileObj = uploadItem?.originFileObj;
+
+      if (fileObj) {
+        const formData = new FormData();
+        formData.append('file', fileObj);
+        try {
+          const response = await uploadFile(formData);
+          console.log('上传文件响应', response);
+          if (response && response.data && response.data.fileUrl) {
+            formValues[imageFields[i]] = response.data.fileUrl;
+          }
+        } catch (error) {
+          console.error(`${imageFields[i]} 上传失败：`, error);
         }
-      } catch (error) {
-        console.error('文件上传失败：', error);
-      }
-    } else {
-      // 如果没有新的文件上传并且图片已被删除
-      if (fileList.length === 0) {
-        formValues.image = '';  // 清空图片字段
+      } else if (fileLists[i].length === 0) {
+        formValues[imageFields[i]] = '';
       }
     }
 
@@ -118,16 +121,24 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
           ? { value: values.parent._id, label: values.parent.name_cn }
           : undefined,
         name: values.name || '',
-        thumbnail: values.image
-          ? [
-              {
-                uid: '-1', // 必须的唯一 uid
-                name: 'image.png', // 默认图片名称
-                status: 'done', // 状态设置为完成
-                url: values.image, // 当前图片的 URL
-              },
-            ]
-          : [],
+        thumbnail: values.image ? [{
+          uid: '-1',
+          name: 'image.png',
+          status: 'done',
+          url: values.image,
+        }] : [],
+        thumbnail_front: values.image_front ? [{
+          uid: '-1',
+          name: 'image.png',
+          status: 'done',
+          url: values.image_front,
+        }] : [],
+        thumbnail_back: values.image_back ? [{
+          uid: '-1',
+          name: 'image.png',
+          status: 'done',
+          url: values.image_back,
+        }] : [],
       }}
       onFinish={handleFinish}
     >
@@ -166,7 +177,47 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
             return false;
           },
           onRemove: () => {
-            setFileList([]);  // 更新 fileList 状态
+            setFileList([]);
+          },
+        }}
+      />
+
+      <ProFormUploadButton
+        title="正面图片"
+        label="正面图片"
+        name="thumbnail_front"
+        max={1}
+        fieldProps={{
+          name: 'file',
+          listType: 'picture-card',
+          defaultFileList: frontFileList,
+          maxCount: 1,
+          beforeUpload: (file) => {
+            setFrontFileList([file]);
+            return false;
+          },
+          onRemove: () => {
+            setFrontFileList([]);
+          },
+        }}
+      />
+
+      <ProFormUploadButton
+        title="背面图片"
+        label="背面图片"
+        name="thumbnail_back"
+        max={1}
+        fieldProps={{
+          name: 'file',
+          listType: 'picture-card',
+          defaultFileList: backFileList,
+          maxCount: 1,
+          beforeUpload: (file) => {
+            setBackFileList([file]);
+            return false;
+          },
+          onRemove: () => {
+            setBackFileList([]);
           },
         }}
       />

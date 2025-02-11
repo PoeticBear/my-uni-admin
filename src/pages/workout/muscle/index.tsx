@@ -28,6 +28,8 @@ const handleAdd = async (fields: TableListItem) => {
       parent: fields.parent,
       name: fields.name,
       image: fields.image,
+      image_front: fields.image_front,
+      image_back: fields.image_back,
     });
     hide();
     message.success('添加成功');
@@ -56,6 +58,8 @@ const handleUpdate = async (fields: FormValueType, currentRow?: TableListItem) =
         parent: fields.parent,
         name: fields.name,
         image: fields.image,
+        image_front: fields.image_front,
+        image_back: fields.image_back,
       },
     );
     hide();
@@ -113,7 +117,7 @@ const TableList: React.FC = () => {
       valueType: 'text',
       search: false,
       render: (_, record: any) => {
-        return record.parent ? record.parent.name_cn : '-'; // 显示父级肌群的名称，如果为空则显示“无父级”
+        return record.parent ? record.parent.name_cn : '-'; // 显示父级肌群的名称，如果为空则显示"无父级"
       },
     },
     {
@@ -131,6 +135,30 @@ const TableList: React.FC = () => {
           <Image width={20} src={text?.toString()} />
         ) : (
           <span style={{ color: 'gray' }}>未上传图片</span> // 图片为空时显示提示文本
+        ),
+    },
+    {
+      title: '正面图',
+      dataIndex: 'image_front',
+      valueType: 'text',
+      search: false,
+      render: (text) =>
+        text?.toString().startsWith('http') || text?.toString().startsWith('https') ? (
+          <Image width={20} src={text?.toString()} />
+        ) : (
+          <span style={{ color: 'gray' }}>未上传图片</span>
+        ),
+    },
+    {
+      title: '背面图',
+      dataIndex: 'image_back',
+      valueType: 'text',
+      search: false,
+      render: (text) =>
+        text?.toString().startsWith('http') || text?.toString().startsWith('https') ? (
+          <Image width={20} src={text?.toString()} />
+        ) : (
+          <span style={{ color: 'gray' }}>未上传图片</span>
         ),
     },
     {
@@ -254,6 +282,8 @@ const TableList: React.FC = () => {
             ...value,
             parent: value.parent || null,
             image: imageUrl,
+            image_front: value.image_front,
+            image_back: value.image_back,
           } as TableListItem);
           if (success) {
             handleModalVisible(false);
@@ -275,6 +305,8 @@ const TableList: React.FC = () => {
               ...value,
               parent: value.parent || null,
               image: value.image,
+              image_front: value.image_front,
+              image_back: value.image_back,
             },
             currentRow,
           );

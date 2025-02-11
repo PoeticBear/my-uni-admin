@@ -41,33 +41,39 @@ const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmi
       name: values.name,
     };
 
-    const uploads = values.upload;
-    const uploadItem = uploads ? uploads[0] : null;
-    const fileObj = uploadItem ? uploadItem.originFileObj : null;
-    if (fileObj) {
-      const formData = new FormData();
-      formData.append('file', fileObj);
-      try {
-        const response = await uploadFile(formData);
-        if (response && response.result && response.result.fileUrl) {
-          // 上传成功，处理返回的 URL
-          console.log('文件上传成功，访问 URL：', response.result.fileUrl);
+    // 处理所有图片上传
+    const uploadFields = ['upload', 'upload_front', 'upload_back'];
+    const imageFields = ['image', 'image_front', 'image_back'];
+
+    for (let i = 0; i < uploadFields.length; i++) {
+      const uploads = values[uploadFields[i]];
+      const uploadItem = uploads ? uploads[0] : null;
+      const fileObj = uploadItem ? uploadItem.originFileObj : null;
+
+      if (fileObj) {
+        const formData = new FormData();
+        formData.append('file', fileObj);
+        try {
+          const response = await uploadFile(formData);
+          if (response && response.result && response.result.fileUrl) {
+            console.log(`${imageFields[i]} 上传成功，访问 URL：`, response.result.fileUrl);
+            formValues = {
+              ...formValues,
+              [imageFields[i]]: response.result.fileUrl,
+            };
+          }
+        } catch (error) {
+          console.error(`${imageFields[i]} 上传失败：`, error);
         }
+      } else {
         formValues = {
           ...formValues,
-          image: response.result.fileUrl,
+          [imageFields[i]]: "",
         };
-        await onSubmit(formValues);
-      } catch (error) {
-        console.error('文件上传失败：', error);
       }
-    } else {
-      formValues = {
-        ...formValues,
-        image: "",
-      };
-      await onSubmit(formValues);
     }
+
+    await onSubmit(formValues);
   };
 
   return (
@@ -124,7 +130,6 @@ const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmi
           name: 'file',
           listType: 'picture-card',
           beforeUpload: (file) => {
-            console.log('执行了beforeUpload');
             setFileList([...fileList, file]);
             return false;
           },
@@ -135,12 +140,46 @@ const CreateForm: React.FC<CreateFormProps> = ({ modalVisible, onCancel, onSubmi
             setFileList(newFileList);
           },
         }}
-        // rules={[
-        //   {
-        //     required: true,
-        //     message: '肌群图片为必填项',
-        //   },
-        // ]}
+      />
+      <ProFormUploadButton
+        title="正面图片"
+        label="正面图片"
+        max={1}
+        name="upload_front"
+        fieldProps={{
+          name: 'file',
+          listType: 'picture-card',
+          beforeUpload: (file) => {
+            setFileList([...fileList, file]);
+            return false;
+          },
+          onRemove: (file) => {
+            const index = fileList.indexOf(file);
+            const newFileList = fileList.slice();
+            newFileList.splice(index, 1);
+            setFileList(newFileList);
+          },
+        }}
+      />
+      <ProFormUploadButton
+        title="背面图片"
+        label="背面图片"
+        max={1}
+        name="upload_back"
+        fieldProps={{
+          name: 'file',
+          listType: 'picture-card',
+          beforeUpload: (file) => {
+            setFileList([...fileList, file]);
+            return false;
+          },
+          onRemove: (file) => {
+            const index = fileList.indexOf(file);
+            const newFileList = fileList.slice();
+            newFileList.splice(index, 1);
+            setFileList(newFileList);
+          },
+        }}
       />
     </ModalForm>
   );
