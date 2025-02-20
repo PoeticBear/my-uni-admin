@@ -8,6 +8,7 @@ export type TableListItem = {
   image: string;
   image_front: string;
   image_back: string;
+  showInFilter: boolean;
 };
 
 export type TableListPagination = {

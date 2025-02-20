@@ -4,6 +4,7 @@ import {
   ProFormSelect,
   ProFormText,
   ProFormUploadButton,
+  ProFormSwitch
 } from '@ant-design/pro-components';
 import { UploadFile } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -24,6 +25,7 @@ export type FormValueType = {
   image?: string;
   image_front?: string;
   image_back?: string;
+  showInFilter?: boolean;
 } & Partial<TableListItem>;
 
 const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
@@ -31,7 +33,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
   const [frontFileList, setFrontFileList] = useState<UploadFile[]>([]);
   const [backFileList, setBackFileList] = useState<UploadFile[]>([]);
   const { onCancel, onSubmit, values } = props;
-  console.log('传入弹窗：', values);
+
 
   useEffect(() => {
     // 初始化所有图片列表
@@ -65,7 +67,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
   };
 
   const handleFinish = async (values: any) => {
-    console.log('handleFinish:', values);
 
     let formValues = {
       name_cn: values.name_cn,
@@ -74,6 +75,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
       image: values.thumbnail?.[0]?.url || '',
       image_front: values.thumbnail_front?.[0]?.url || '',
       image_back: values.thumbnail_back?.[0]?.url || '',
+      showInFilter: values.showInFilter,
     };
 
     // 处理所有图片上传
@@ -102,7 +104,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
         formValues[imageFields[i]] = '';
       }
     }
-
+    console.log("formValues:",formValues);
     await onSubmit(formValues);
   };
 
@@ -161,6 +163,13 @@ const UpdateForm: React.FC<UpdateFormProps> = (props: any) => {
         }}
       />
       <ProFormText label="肌群英文名称" name="name" />
+
+      <ProFormSwitch
+        label="是否显示在筛选条件中"
+        name="showInFilter"
+        initialValue={values.showInFilter}
+      />
+
 
       <ProFormUploadButton
         title="肌群图片"

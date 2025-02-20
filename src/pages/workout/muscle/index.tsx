@@ -60,6 +60,7 @@ const handleUpdate = async (fields: FormValueType, currentRow?: TableListItem) =
         image: fields.image,
         image_front: fields.image_front,
         image_back: fields.image_back,
+        showInFilter: fields.showInFilter,
       },
     );
     hide();
@@ -124,6 +125,12 @@ const TableList: React.FC = () => {
       title: '肌群英文名称',
       dataIndex: 'name',
       valueType: 'text',
+    },
+    {
+      title: '是否筛选条件',
+      dataIndex: 'showInFilter',
+      valueType: 'text',
+      render: (text) => (text ? '是' : '否'), // 根据布尔值显示 "是" 或 "否"
     },
     {
       title: '图片',
@@ -307,6 +314,7 @@ const TableList: React.FC = () => {
               image: value.image,
               image_front: value.image_front,
               image_back: value.image_back,
+              showInFilter: value.showInFilter,
             },
             currentRow,
           );
